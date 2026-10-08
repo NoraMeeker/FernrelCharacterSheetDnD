@@ -219,6 +219,23 @@ td.n { font-variant-numeric: tabular-nums; }
 .jump { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
 .jump button { font-family: var(--ui); font-size: .85rem; border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 3px 12px; }
 .group { margin-bottom: 22px; scroll-margin-top: 16px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px clamp(14px, 3vw, 24px); }
+/* The Storm's section: the corruption crawls along its edges */
+.group.storm-box { position: relative; border-color: #8f5cff; background: radial-gradient(ellipse at 20% 0%, rgba(120, 60, 230, .2), transparent 60%), radial-gradient(ellipse at 100% 100%, rgba(90, 30, 180, .16), transparent 55%), var(--panel); animation: storm-pulse 5.3s infinite; }
+.storm-box > :not(.sb-canvas) { position: relative; z-index: 1; }
+.sb-canvas { position: absolute; left: -26px; top: -26px; width: calc(100% + 52px); height: calc(100% + 52px); pointer-events: none; z-index: 0; }
+.storm-box .group-head h2 { color: #efe4ff; text-shadow: 0 0 12px #a46bff, 0 0 2px #fff; animation: storm-title 6.1s infinite; }
+@keyframes storm-pulse {
+  0%, 100% { box-shadow: 0 0 0 1px #8f5cff55, 0 0 26px -6px var(--bolt-glow), inset 0 0 38px -12px rgba(130, 70, 255, .35); }
+  6% { box-shadow: 0 0 0 1px #c9a6ff, 0 0 44px -2px var(--bolt-glow), inset 0 0 50px -8px rgba(160, 100, 255, .55); }
+  7% { box-shadow: 0 0 0 1px #8f5cff33, 0 0 14px -8px var(--bolt-glow), inset 0 0 20px -14px rgba(130, 70, 255, .2); }
+  9% { box-shadow: 0 0 0 1px #d8bfff, 0 0 52px 0 var(--bolt-glow), inset 0 0 56px -6px rgba(170, 110, 255, .6); }
+  14% { box-shadow: 0 0 0 1px #8f5cff55, 0 0 26px -6px var(--bolt-glow), inset 0 0 38px -12px rgba(130, 70, 255, .35); }
+  61% { box-shadow: 0 0 0 1px #8f5cff55, 0 0 30px -6px var(--bolt-glow), inset 0 0 40px -12px rgba(130, 70, 255, .4); }
+  62% { box-shadow: 0 0 0 1px #c9a6ff, 0 0 40px -2px var(--bolt-glow), inset 0 0 46px -8px rgba(160, 100, 255, .5); }
+  64% { box-shadow: 0 0 0 1px #8f5cff55, 0 0 26px -6px var(--bolt-glow), inset 0 0 38px -12px rgba(130, 70, 255, .35); }
+}
+@keyframes storm-title { 0%, 100% { opacity: 1; } 31% { opacity: 1; } 31.5% { opacity: .55; } 32% { opacity: 1; } 32.6% { opacity: .7; } 33% { opacity: 1; } 78% { opacity: 1; transform: none; } 78.4% { opacity: .6; transform: translateX(1px); } 78.8% { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .group.storm-box, .storm-box .group-head h2 { animation: none; } }
 .group-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; border-bottom: 1px solid var(--line); padding-bottom: 6px; margin-bottom: 8px; }
 .group-head h2 { font-family: var(--body); font-weight: 700; font-size: 1.6rem; }
 .group-intro { color: var(--muted); font-style: italic; margin-bottom: 14px; max-width: 70ch; }
@@ -476,7 +493,7 @@ function vFeatures() {
         ${usesTxt ? `<div class="uses">${usesTxt}</div>` : ""}
         ${T(`${p}.text`, { multi: true, ph: "Description" })}</div>`;
     }).join("");
-    return `<section class="group" id="grp-${gi}">
+    return `<section class="group${g.id === "storm" ? " storm-box" : ""}" id="grp-${gi}">${g.id === "storm" ? `<canvas class="sb-canvas" aria-hidden="true"></canvas>` : ""}
       <div class="group-head"><span class="label">${T(`features.${gi}.kind`, { ph: "Type" })}</span><h2>${T(`features.${gi}.title`, { ph: "Title" })}</h2>${editing && !["race","storm","class","subclass","background","feats"].includes(g.id) ? `<button class="x" data-act="del" data-p="features" data-i="${gi}">✕ remove section</button>` : ""}</div>
       ${(g.intro || editing) ? `<div class="group-intro">${T(`features.${gi}.intro`, { multi: true, ph: "Overview (for example, the subclass explanation from D&D Beyond)" })}</div>` : ""}
       ${items || `<p class="empty">Nothing here yet.</p>`}
@@ -960,6 +977,99 @@ async function localSaver() {
   };
 }
 
+/* ---------- the Storm's section: lightning that crawls along the box and reaches out of it ---------- */
+function startStormBox() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const M = 26;
+  let crawlers = [], tendrils = [], arcs = [], surge = 0, last = 0;
+  const jag = (x, y, ang, len) => {
+    const pts = [{ x, y }];
+    let d = 0;
+    while (d < len) { const step = 5 + Math.random() * 7; ang += (Math.random() - .5) * 1.3; x += Math.cos(ang) * step; y += Math.sin(ang) * step; d += step; pts.push({ x, y }); }
+    return pts;
+  };
+  const stroke = (ctx, pts, a, w) => {
+    if (a <= 0 || pts.length < 2) return;
+    ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+    ctx.shadowColor = "#9b5cff"; ctx.shadowBlur = 14; ctx.strokeStyle = `rgba(150,90,255,${.4 * a})`; ctx.lineWidth = 4.5 * w; ctx.stroke();
+    ctx.shadowBlur = 6; ctx.strokeStyle = `rgba(238,226,255,${a})`; ctx.lineWidth = 1.2 * w; ctx.stroke();
+  };
+  function frame(now) {
+    requestAnimationFrame(frame);
+    if (now - last < 33) return;
+    last = now;
+    const cv = app.querySelector(".sb-canvas");
+    if (!cv || document.hidden) return;
+    const box = cv.parentElement, W = box.offsetWidth, H = box.offsetHeight, rect = box.getBoundingClientRect();
+    if (rect.bottom < -M || rect.top > innerHeight + M) return;
+    const dpr = window.devicePixelRatio || 1, cw = W + 2 * M, ch = H + 2 * M;
+    if (cv.width !== Math.round(cw * dpr) || cv.height !== Math.round(ch * dpr)) { cv.width = Math.round(cw * dpr); cv.height = Math.round(ch * dpr); }
+    const ctx = cv.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, M * dpr, M * dpr);
+    ctx.clearRect(-M, -M, cw, ch);
+    ctx.lineJoin = "round"; ctx.lineCap = "round";
+    const P = 2 * (W + H);
+    const at = s => {
+      s = ((s % P) + P) % P;
+      if (s < W) return { x: s, y: 0, nx: 0, ny: 1 };
+      s -= W; if (s < H) return { x: W, y: s, nx: -1, ny: 0 };
+      s -= H; if (s < W) return { x: W - s, y: H, nx: 0, ny: -1 };
+      s -= W; return { x: 0, y: H - s, nx: 1, ny: 0 };
+    };
+    if (!crawlers.length) for (let i = 0; i < 7; i++) crawlers.push({ s: Math.random() * P, v: (Math.random() < .5 ? -1 : 1) * (40 + Math.random() * 130), len: 50 + Math.random() * 140 });
+    // crawlers: jittering lightning that creeps along the border, stalls and reverses
+    for (const c of crawlers) {
+      c.s += c.v * .033;
+      if (Math.random() < .012) c.v *= -1;
+      if (Math.random() < .015) c.v = (c.v < 0 ? -1 : 1) * (20 + Math.random() * 180);
+      if (Math.random() < .22) continue;
+      const n = Math.max(5, Math.round(c.len / 7)), dir = Math.sign(c.v) || 1, pts = [];
+      for (let k = 0; k <= n; k++) {
+        const p = at(c.s + dir * k * c.len / n), j = (Math.random() - .5) * 12;
+        pts.push({ x: p.x + p.nx * j + (Math.random() - .5) * 3, y: p.y + p.ny * j + (Math.random() - .5) * 3 });
+      }
+      stroke(ctx, pts, .45 + Math.random() * .55, 1);
+    }
+    // surge: now and then the whole border lights up at once
+    if (!surge && Math.random() < .007) surge = now;
+    if (surge) {
+      const t = now - surge;
+      if (t > 260) surge = 0;
+      else if (t < 60 || (t > 120 && t < 170) || (t > 210 && t < 240)) {
+        const n = Math.round(P / 7), pts = [];
+        for (let k = 0; k <= n; k++) { const q = at(k * P / n), j = (Math.random() - .5) * 14; pts.push({ x: q.x + q.nx * j, y: q.y + q.ny * j }); }
+        stroke(ctx, pts, .9, 1.1);
+      }
+    }
+    // arcs: faint bolts that cut across the inside of the box, behind the text
+    if (Math.random() < .012) {
+      const a = at(Math.random() * P), b = at(Math.random() * P);
+      if (Math.hypot(a.x - b.x, a.y - b.y) > Math.min(W, H) * .5) arcs.push({ a, b, born: now });
+    }
+    arcs = arcs.filter(r => now - r.born < 300);
+    for (const r of arcs) {
+      if (Math.random() < .35) continue;
+      const len = Math.hypot(r.b.x - r.a.x, r.b.y - r.a.y), n = Math.max(8, Math.round(len / 14)), pts = [];
+      for (let k = 0; k <= n; k++) { const f = k / n, off = (Math.random() - .5) * 26 * Math.sin(Math.PI * f); pts.push({ x: r.a.x + (r.b.x - r.a.x) * f - (r.b.y - r.a.y) / len * off, y: r.a.y + (r.b.y - r.a.y) * f + (r.b.x - r.a.x) / len * off }); }
+      stroke(ctx, pts, .32 * (1 - (now - r.born) / 300), .8);
+    }
+    // tendrils: brief fingers that reach into the box or claw out of it
+    if (Math.random() < .14) {
+      const p = at(Math.random() * P), out = Math.random() < .4 ? -1 : 1;
+      tendrils.push({ x: p.x, y: p.y, ang: Math.atan2(p.ny * out, p.nx * out) + (Math.random() - .5) * 1.1, len: 20 + Math.random() * 75, born: now, life: 140 + Math.random() * 380 });
+    }
+    tendrils = tendrils.filter(t => now - t.born < t.life);
+    for (const t of tendrils) {
+      if (Math.random() < .3) continue;
+      const fade = 1 - (now - t.born) / t.life, pts = jag(t.x, t.y, t.ang, t.len);
+      stroke(ctx, pts, fade * .9, .8);
+      if (Math.random() < .55) { const b = pts[Math.floor(pts.length * .5)]; stroke(ctx, jag(b.x, b.y, t.ang + (Math.random() - .5) * 1.8, t.len * .45), fade * .6, .55); }
+    }
+    ctx.shadowBlur = 0;
+  }
+  requestAnimationFrame(frame);
+}
+
 /* ---------- boot ---------- */
 (async () => {
   try {
@@ -969,6 +1079,7 @@ async function localSaver() {
     render();
     paintCobbles();
     startStorm();
+    startStormBox();
   } catch (e) {
     app.querySelector(".main").innerHTML = location.protocol === "file:"
       ? `<p class="loading">This page needs its little server to load Fernrel's data. In this folder, run <code>python3 server.py</code>, then open http://localhost:8000.</p>`
