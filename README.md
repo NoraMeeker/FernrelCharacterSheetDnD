@@ -45,6 +45,14 @@ git add -A
 git commit -m "After session 12"
 ```
 
+Then send them to GitHub (https://github.com/NoraMeeker/FernrelCharacterSheetDnD, private):
+
+```sh
+git push
+```
+
+To get the sheet on a new computer: `git clone https://github.com/NoraMeeker/FernrelCharacterSheetDnD.git`, then `python3 server.py` inside it.
+
 `git log` lists your snapshots. `git diff` shows what changed since the last one. `backups/` isn't tracked, since git already keeps the history.
 
 ## The artifact and this folder
