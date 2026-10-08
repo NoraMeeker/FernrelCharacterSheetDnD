@@ -63,7 +63,7 @@
    }
   ],
   "attackNotes": "Attack action: 2 attacks (Extra Attack).\nBonus action: 2 off-hand attacks, granted by Linxa'Kasendalor's Fangs.\nSlayer's Prey: +1d6 the first time each turn you hit the marked target.\n\nBonus action conflict: Lightning Arrow, Slayer's Prey, Starlight Step and the off-hand attacks all use your bonus action, so you get one per turn.\n\n*Rock: an improvised thrown weapon normally uses Strength (+1) without proficiency. Ask your DM whether she can use Dexterity and proficiency (+10).",
-  "proficiencies": "Armor: light, medium, shields\nWeapons: simple, martial\nTools: Lute (from Outlander)\nLanguages: Common, Elvish, Draconic, Abyssal, Infernal",
+  "proficiencies": "Armor: light, medium, shields\nWeapons: simple, martial\nTools: Lute (from Outlander)\nLanguages: Common, Elvish, Draconic, Abyssal/Infernal (one language in this world), Celestial, one more to choose",
   "personality": "",
   "ideals": "",
   "bonds": "",
@@ -352,7 +352,7 @@
      "uses": "",
      "max": null,
      "used": 0,
-     "text": "Favored enemies: Dragons, Humans, Kobolds, Dragonborn\n\nYou have advantage on Wisdom (Survival) checks to track your favored enemies and on Intelligence checks to recall information about them. You also learn one language they speak. You choose more favored enemies at 6th and 14th level."
+     "text": "Favored enemies: Dragons, Humans, Kobolds, Dragonborn, Elves\n\nYou have advantage on Wisdom (Survival) checks to track your favored enemies and on Intelligence checks to recall information about them. You also learn one language they speak. You choose more favored enemies at 6th and 14th level."
     },
     {
      "name": "Natural Explorer (1st level)",
