@@ -1,0 +1,7 @@
+# Dated copies made by server.py on each save; git history already covers this
+backups/
+
+# Half-written files from an interrupted save
+*.tmp
+
+__pycache__/

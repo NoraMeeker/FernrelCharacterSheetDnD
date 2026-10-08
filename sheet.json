@@ -1,0 +1,614 @@
+{
+ "sheet": {
+  "name": "Fernrel",
+  "classLevel": "Ranger 16",
+  "subclass": "Monster Slayer",
+  "background": "Outlander",
+  "race": "Astral Elf",
+  "alignment": "???",
+  "player": "Nora",
+  "xp": "Milestone",
+  "abilities": {
+   "str": 12,
+   "dex": 20,
+   "con": 18,
+   "int": 16,
+   "wis": 20,
+   "cha": 14
+  },
+  "prof": 5,
+  "inspiration": false,
+  "saves": {
+   "str": 1,
+   "dex": 1,
+   "con": 0,
+   "int": 0,
+   "wis": 0,
+   "cha": 0
+  },
+  "skills": {
+   "Athletics": 1,
+   "Insight": 1,
+   "Investigation": 1,
+   "Perception": 1,
+   "Stealth": 1,
+   "Survival": 1
+  },
+  "ac": 18,
+  "speed": "40 ft",
+  "initBonus": null,
+  "hpMax": 154,
+  "hpCur": 154,
+  "hpTemp": null,
+  "hitDice": "d10",
+  "hitDiceTotal": 16,
+  "hitDiceUsed": 0,
+  "deathSuccess": 0,
+  "deathFail": 0,
+  "attacks": [
+   {
+    "name": "Linxa'Kasendalor's Fang (main hand)",
+    "bonus": "+12",
+    "damage": "2d6+7 piercing + 1d6 lightning"
+   },
+   {
+    "name": "Linxa'Kasendalor's Fang (off hand) ×2",
+    "bonus": "+12",
+    "damage": "2d6+7 piercing + 1d6 lightning"
+   },
+   {
+    "name": "Thrown rock + Lightning Arrow",
+    "bonus": "+1*",
+    "damage": "4d8 lightning (half on a miss) + 2d8 burst, DC 18 Dex"
+   }
+  ],
+  "attackNotes": "Attack action: 2 attacks (Extra Attack).\nBonus action: 2 off-hand attacks, granted by Linxa'Kasendalor's Fangs.\nSlayer's Prey: +1d6 the first time each turn you hit the marked target.\n\nBonus action conflict: Lightning Arrow, Slayer's Prey, Starlight Step and the off-hand attacks all use your bonus action, so you get one per turn.\n\n*Rock: an improvised thrown weapon normally uses Strength (+1) without proficiency. Ask your DM whether she can use Dexterity and proficiency (+10).",
+  "proficiencies": "Armor: light, medium, shields\nWeapons: simple, martial\nTools: Lute (from Outlander)\nLanguages: Common, Elvish, Draconic, Abyssal, Infernal",
+  "personality": "",
+  "ideals": "",
+  "bonds": "",
+  "flaws": "",
+  "defenses": "Resistance: fire (metal band)\nResistance to magic (metal band). Ask the DM exactly what this covers.\nAdvantage on saves against being charmed (Fey Ancestry)\n+1d6 to saves forced by her Slayer's Prey target (Supernatural Defense)\nReaction: weapon attack before a save forced by her Slayer's Prey target; on a hit she automatically succeeds (Slayer's Counter)\n\nSenses: darkvision 60 ft, passive Perception 20",
+  "tranceSkill": "",
+  "tranceTool": ""
+ },
+ "spells": {
+  "ability": "wis",
+  "slots": {
+   "1": {
+    "max": 4,
+    "used": 0
+   },
+   "2": {
+    "max": 3,
+    "used": 0
+   },
+   "3": {
+    "max": 3,
+    "used": 0
+   },
+   "4": {
+    "max": 2,
+    "used": 0
+   }
+  },
+  "list": {
+   "0": [
+    {
+     "name": "Sacred Flame",
+     "castingTime": "1 action",
+     "range": "60 feet",
+     "components": "V, S",
+     "duration": "Instantaneous",
+     "conc": false,
+     "ritual": false,
+     "tag": "Astral Fire",
+     "text": "Flame-like radiance descends on a creature you can see within range. The target makes a Dexterity saving throw against your spell save DC, and gains no benefit from cover for this save. On a failure, it takes 3d8 radiant damage (at 16th level).\n\nDamage by character level: 1d8, 2d8 at 5th, 3d8 at 11th, 4d8 at 17th.\n\nSpellcasting ability: Wisdom (chosen through Astral Fire)."
+    }
+   ],
+   "1": [
+    {
+     "name": "Longstrider",
+     "castingTime": "1 action",
+     "range": "Touch",
+     "components": "V, S, M (a pinch of dirt)",
+     "duration": "1 hour",
+     "conc": false,
+     "ritual": false,
+     "tag": "",
+     "text": "You touch a creature and its speed increases by 10 feet until the spell ends.\n\nAt higher levels: one additional creature for each slot level above 1st."
+    },
+    {
+     "name": "Cure Wounds",
+     "castingTime": "1 action",
+     "range": "Touch",
+     "components": "V, S",
+     "duration": "Instantaneous",
+     "conc": false,
+     "ritual": false,
+     "tag": "",
+     "text": "A creature you touch regains hit points equal to 1d8 + your spellcasting ability modifier. It has no effect on undead or constructs.\n\nAt higher levels: +1d8 healing for each slot level above 1st."
+    },
+    {
+     "name": "Protection from Evil and Good",
+     "castingTime": "1 action",
+     "range": "Touch",
+     "components": "V, S, M (holy water or powdered silver and iron, consumed)",
+     "duration": "Up to 10 minutes",
+     "conc": true,
+     "ritual": false,
+     "tag": "Monster Slayer",
+     "text": "One willing creature you touch is protected against aberrations, celestials, elementals, fey, fiends, and undead. Those creatures have disadvantage on attack rolls against it, and it can't be charmed, frightened, or possessed by them. If the target is already charmed, frightened, or possessed by one of them, it has advantage on any new saving throw against that effect."
+    }
+   ],
+   "2": [
+    {
+     "name": "Pass without Trace",
+     "castingTime": "1 action",
+     "range": "Self",
+     "components": "V, S, M (ashes from a burned mistletoe leaf and a sprig of spruce)",
+     "duration": "Up to 1 hour",
+     "conc": true,
+     "ritual": false,
+     "tag": "",
+     "text": "A veil of shadows and silence surrounds you and your companions. Each creature you choose within 30 feet of you (including you) gets +10 to Dexterity (Stealth) checks and can't be tracked except by magic. Those creatures leave behind no tracks or other traces of their passage."
+    },
+    {
+     "name": "Lesser Restoration",
+     "castingTime": "1 action",
+     "range": "Touch",
+     "components": "V, S",
+     "duration": "Instantaneous",
+     "conc": false,
+     "ritual": false,
+     "tag": "",
+     "text": "You touch a creature and end either one disease or one condition afflicting it. The condition can be blinded, deafened, paralyzed, or poisoned."
+    },
+    {
+     "name": "Zone of Truth",
+     "castingTime": "1 action",
+     "range": "60 feet",
+     "components": "V, S",
+     "duration": "10 minutes",
+     "conc": false,
+     "ritual": false,
+     "tag": "Monster Slayer",
+     "text": "You create a 15-foot-radius sphere centered on a point within range. A creature that enters the zone for the first time on a turn, or starts its turn there, makes a Charisma saving throw. On a failure, it can't speak a deliberate lie while in the zone. You know whether each creature succeeds or fails.\n\nAn affected creature knows it's under the spell and can avoid answering questions it would normally lie about. It can be evasive as long as it stays within the bounds of the truth."
+    }
+   ],
+   "3": [
+    {
+     "name": "Lightning Arrow",
+     "castingTime": "1 bonus action",
+     "range": "Self",
+     "components": "V, S",
+     "duration": "Up to 1 minute",
+     "conc": true,
+     "ritual": false,
+     "tag": "",
+     "text": "The next time you make a ranged weapon attack before the spell ends, the ammunition (or the weapon itself, if it's thrown) turns into a bolt of lightning.\n\n• On a hit, the target takes 4d8 lightning damage instead of the weapon's normal damage. On a miss, it takes half as much.\n• Whether you hit or miss, each creature within 10 feet of the target makes a Dexterity saving throw, taking 2d8 lightning damage on a failure or half as much on a success.\n\nThe ammunition or weapon then returns to its normal form.\n\nAt higher levels: both the hit damage and the burst damage increase by 1d8 for each slot level above 3rd (4th-level slot: 5d8 on hit, 3d8 burst).",
+     "fav": true
+    },
+    {
+     "name": "Revivify",
+     "castingTime": "1 action",
+     "range": "Touch",
+     "components": "V, S, M (diamonds worth 300 gp, consumed)",
+     "duration": "Instantaneous",
+     "conc": false,
+     "ritual": false,
+     "tag": "",
+     "text": "You touch a creature that has died within the last minute. It returns to life with 1 hit point. This doesn't work on a creature that died of old age, and it can't restore missing body parts."
+    },
+    {
+     "name": "Water Walk",
+     "castingTime": "1 action",
+     "range": "30 feet",
+     "components": "V, S, M (a piece of cork)",
+     "duration": "1 hour",
+     "conc": false,
+     "ritual": true,
+     "tag": "",
+     "text": "Up to ten willing creatures you can see within range can move across any liquid surface (water, acid, mud, snow, quicksand, lava) as if it were harmless solid ground. Creatures crossing molten lava still take damage from the heat.\n\nIf you target a creature that's submerged, it's carried toward the surface at 60 feet per round."
+    },
+    {
+     "name": "Magic Circle",
+     "castingTime": "1 minute",
+     "range": "10 feet",
+     "components": "V, S, M (holy water or powdered silver and iron worth at least 100 gp, consumed)",
+     "duration": "1 hour",
+     "conc": false,
+     "ritual": false,
+     "tag": "Monster Slayer",
+     "text": "You create a 10-foot-radius, 20-foot-tall cylinder of magical energy centered on a point on the ground within range. Choose one or more of: celestials, elementals, fey, fiends, or undead. Against the chosen types:\n\n• They can't willingly enter the cylinder by nonmagical means. If one tries to teleport or travel between planes to get in, it must first succeed on a Charisma saving throw.\n• They have disadvantage on attack rolls against targets inside the cylinder.\n• Targets inside can't be charmed, frightened, or possessed by them.\n\nYou can reverse the spell so it traps a creature of the chosen type inside instead of keeping it out.\n\nAt higher levels: the duration increases by 1 hour for each slot level above 3rd."
+    }
+   ],
+   "4": [
+    {
+     "name": "Summon Elemental",
+     "castingTime": "1 action",
+     "range": "90 feet",
+     "components": "V, S, M (air, a pebble, ash, and water inside a gold-inlaid vial worth at least 400 gp)",
+     "duration": "Up to 1 hour",
+     "conc": true,
+     "ritual": false,
+     "tag": "",
+     "text": "You call forth an elemental spirit of air, earth, fire, or water. It appears in an unoccupied space you can see within range and uses the Elemental Spirit stat block (Tasha's Cauldron of Everything), with the spell's level setting its numbers.\n\nIt is friendly to you and your companions, rolls no initiative, and acts immediately after you on your turn. It obeys your verbal commands (no action needed). If you don't command it, it takes the Dodge action and uses its movement to avoid danger.\n\nElemental Spirit at 4th level (quick reference):\n• AC 15 (11 + spell level). HP 50 (+10 per slot level above 4th).\n• Speed 40 ft. Air: fly 40 ft (hover). Earth: burrow 40 ft. Water: swim 40 ft.\n• Multiattack: attacks equal to half the spell level, rounded down (2 at 4th level).\n• Slam: melee spell attack using your spell attack bonus, 1d10 + 4 + spell level bludgeoning damage (fire spirit deals fire damage).\n\nAt higher levels: use the higher slot level wherever the stat block uses the spell's level."
+    },
+    {
+     "name": "Freedom of Movement",
+     "castingTime": "1 action",
+     "range": "Touch",
+     "components": "V, S, M (a leather strap bound around the arm or a similar appendage)",
+     "duration": "1 hour",
+     "conc": false,
+     "ritual": false,
+     "tag": "",
+     "text": "You touch a willing creature. Until the spell ends:\n\n• Difficult terrain doesn't affect its movement.\n• Spells and other magic can't reduce its speed or cause it to be paralyzed or restrained.\n• It can spend 5 feet of movement to automatically escape nonmagical restraints such as manacles or a grapple.\n• Being underwater imposes no penalties on its movement or attacks."
+    },
+    {
+     "name": "Banishment",
+     "castingTime": "1 action",
+     "range": "60 feet",
+     "components": "V, S, M (an item distasteful to the target)",
+     "duration": "Up to 1 minute",
+     "conc": true,
+     "ritual": false,
+     "tag": "Monster Slayer",
+     "text": "One creature you can see within range makes a Charisma saving throw. On a failure, it's banished.\n\n• If the target is native to the plane you're on, it goes to a harmless demiplane, where it is incapacitated. It returns to the space it left (or the nearest unoccupied space) when the spell ends.\n• If the target is native to a different plane, it is sent home with a faint popping noise. If the spell lasts the full minute, it stays there. Otherwise it returns when the spell ends.\n\nAt higher levels: one additional creature for each slot level above 4th."
+    }
+   ]
+  }
+ },
+ "features": [
+  {
+   "id": "race",
+   "kind": "Race",
+   "title": "Astral Elf (from The Storm)",
+   "intro": "Astral elves don't exist in this campaign. Fernrel was born a wood elf. After she saw Balasar (also called the Void, or the Prince), The Storm's corruption gave her these astral elf traits. Her lightning abilities come from the corruption.",
+   "items": [
+    {
+     "name": "Astral Fire",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "She knows sacred flame, with Wisdom as her spellcasting ability for it.\n\nAstral elves know one cantrip from: dancing lights, light, or sacred flame. Intelligence, Wisdom, or Charisma is the spellcasting ability (chosen when you pick this race)."
+    },
+    {
+     "name": "Darkvision",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "You can see in dim light within 60 feet as if it were bright light, and in darkness as if it were dim light. In darkness you see only shades of gray."
+    },
+    {
+     "name": "Fey Ancestry",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "You have advantage on saving throws you make to avoid or end the charmed condition."
+    },
+    {
+     "name": "Keen Senses",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "You have proficiency in one of these skills: Insight, Perception, or Survival."
+    },
+    {
+     "name": "Starlight Step",
+     "uses": "Proficiency bonus (5) per long rest",
+     "max": 5,
+     "used": 2,
+     "text": "As a bonus action, you magically teleport up to 30 feet to an unoccupied space you can see.\n\nFor Fernrel this is Storm lightning: the purple lightning in her eyes glows when she teleports.",
+     "pin": true
+    },
+    {
+     "name": "Astral Trance",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "You don't need to sleep. You finish a long rest in 4 hours of trance, staying conscious. When you finish the trance, you gain proficiency in one skill and one weapon or tool of your choice until your next long rest."
+    }
+   ]
+  },
+  {
+   "id": "storm",
+   "kind": "Corruption",
+   "title": "The Storm",
+   "intro": "Fernrel is partly possessed by something called The Storm. NPCs have warned her not to use the lightning if she can help it.",
+   "items": [
+    {
+     "name": "The Storm",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "Source: she saw Balasar (the Void, the Prince) and was changed.\nGives her: lightning abilities and her astral elf traits, including Starlight Step.\nTell: faint purple lightning in her eyes, which glows brighter whenever the Storm's lightning happens (teleporting, or lightning from her hand).\nRisk: NPCs warn that using the lightning may feed the corruption.\nSafe: Lightning Arrow and the lightning damage from her rapiers don't count (confirmed by the DM)."
+    },
+    {
+     "name": "Unnamed Ring (attuned)",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "Absorbs lightning when it touches the hand wearing the ring.\nGlows purple when lightning is about to happen.\nShe believes it keeps her from using the lightning by accident.\nWhat else it does: unknown."
+    },
+    {
+     "name": "Signs of the corruption",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "Two sessions ago: she watched the ring start to glow. The glow spread up her arm and she felt strange. She reached out, ready to use Starlight Step, but she didn't teleport. A ball of lightning shot from her hand instead. That was the first and only time so far.\n\nMost recent session: the ring lit up and she had to make a Wisdom saving throw. This was also a first, so the corruption may be getting worse.\n\nRight after that save, a lightning drake attacked her. It seemed to be possessed by the Storm, and a lightning drake didn't fit the lava and obsidian land around them. Just before she killed it, it said \"I'll be back.\" She suspects Balasar was speaking through it, not the drake.\n\nHer Wisdom save is +5 (she isn't proficient). Lucky lets her roll an extra d20 on saving throws.\n\nLog new signs here:\n"
+    }
+   ]
+  },
+  {
+   "id": "class",
+   "kind": "Class",
+   "title": "Ranger",
+   "intro": "Ranger class features. Paste your D&D Beyond text over these summaries whenever you like.",
+   "items": [
+    {
+     "name": "Favored Enemy (1st level)",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "Favored enemies: Dragons, Humans, Kobolds, Dragonborn\n\nYou have advantage on Wisdom (Survival) checks to track your favored enemies and on Intelligence checks to recall information about them. You also learn one language they speak. You choose more favored enemies at 6th and 14th level."
+    },
+    {
+     "name": "Natural Explorer (1st level)",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "Favored terrains: Caves (Underdark), Mountains, Forest\n\nWhen you make an Intelligence or Wisdom check related to your favored terrain, your proficiency bonus is doubled if you're using a skill you're proficient in.\n\nWhile traveling for an hour or more in your favored terrain:\n• Difficult terrain doesn't slow your group's travel.\n• Your group can't become lost except by magic.\n• You stay alert to danger even while foraging, navigating, or tracking.\n• Traveling alone, you can move stealthily at a normal pace.\n• When you forage, you find twice as much food.\n• When tracking, you learn the creatures' exact number, sizes, and how long ago they passed.\n\nYou choose more favored terrains at 6th and 10th level."
+    },
+    {
+     "name": "Fighting Style: Two-Weapon Fighting (2nd level)",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "When you fight with two weapons, you add your ability modifier to the damage of your off-hand attacks. That's why her off-hand rapier attacks deal 2d6+7 piercing + 1d6 lightning, the same as her main hand."
+    },
+    {
+     "name": "Spellcasting (2nd level)",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "You cast ranger spells using Wisdom. Your spells known, spell slots, save DC and spell attack are on the Spells tab. You regain spent slots on a long rest."
+    },
+    {
+     "name": "Primeval Awareness (3rd level)",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "As an action, spend one ranger spell slot to focus your awareness on the region around you. For 1 minute per level of the slot, you sense whether any of these are within 1 mile (6 miles in a favored terrain): aberrations, celestials, dragons, elementals, fey, fiends, and undead. You don't learn their location or number.\n\nHow to use it:\n• Costs: your action plus one spell slot of any level. A higher slot lasts longer: 1st = 1 minute, 2nd = 2 minutes, 3rd = 3, 4th = 4.\n• Not concentration, so it doesn't end Lightning Arrow or other concentration spells.\n• Range: 1 mile, or 6 miles in her favored terrains (caves, mountains, forest).\n• You learn only whether those creature types are present. You don't learn where they are, how many, or exactly what they are.\n\nTip: a 1st-level slot is usually enough. She has 4, and her 3rd- and 4th-level slots are better saved for Lightning Arrow and Banishment.\n\nRight now: the party is in a fire dragon's lava land, and a Storm-possessed drake promised to come back. Dragons (and most drakes) show up on this sense.\nAsk the DM: does the lava and obsidian land count as mountains (6 miles)? Would the Storm or Balasar register as any of these creature types?"
+    },
+    {
+     "name": "Extra Attack (5th level)",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "You can attack twice, instead of once, whenever you take the Attack action on your turn."
+    },
+    {
+     "name": "Land's Stride (8th level)",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "Moving through nonmagical difficult terrain costs you no extra movement. You can pass through nonmagical plants without being slowed and without taking damage from thorns, spines, or similar hazards. You have advantage on saving throws against plants that are magically created or manipulated to impede movement, such as those created by the entangle spell."
+    },
+    {
+     "name": "Hide in Plain Sight (10th level)",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "Spend 1 minute creating camouflage with natural materials such as mud, dirt, plants, or soot. Once camouflaged, you can press against a solid surface (a tree, a wall) that is at least as tall and wide as you to gain +10 to Dexterity (Stealth) checks while you remain still. Once you move or take an action or reaction, you must camouflage yourself again."
+    },
+    {
+     "name": "Vanish (14th level)",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "You can use the Hide action as a bonus action on your turn. You also can't be tracked by nonmagical means, unless you choose to leave a trail.\n\nHow hiding works:\n• You need cover or a place out of sight (a pillar, a wall, smoke, deep darkness). You can't hide from someone who can see you clearly. The DM decides if a spot works.\n• Roll Stealth (+10, no armor disadvantage). Each enemy compares it to their passive Perception, or their Perception roll if they're searching.\n• While hidden: advantage on your next attack against a creature that can't see you, and attacks against you have disadvantage.\n• It ends when you attack (hit or miss), make noise, or step into the open.\n\nTactic: attack, then use your bonus action to Vanish behind cover. Next turn, your first attack has advantage.\nUses your bonus action, so it competes with the off-hand attacks, Lightning Arrow, Slayer's Prey and Starlight Step.\nPass without Trace adds +10 to Stealth (+20 total).\nAsk the DM: can the purple glow in her eyes or the ring give away her hiding spot?"
+    }
+   ]
+  },
+  {
+   "id": "subclass",
+   "kind": "Subclass",
+   "title": "Monster Slayer",
+   "intro": "Ranger archetype from Xanathar's Guide to Everything. Monster Slayers hunt vampires, dragons, fiends, and other creatures of magic.",
+   "items": [
+    {
+     "name": "Monster Slayer Magic",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "You always know these spells, and they don't count against your spells known: protection from evil and good (3rd), zone of truth (5th), magic circle (9th), banishment (13th), hold monster (17th)."
+    },
+    {
+     "name": "Hunter's Sense",
+     "uses": "Wisdom modifier (5) per long rest",
+     "max": 5,
+     "used": 3,
+     "text": "As an action, choose one creature you can see within 60 feet. You learn its damage immunities, resistances, and vulnerabilities. If it's hidden from divination magic, you sense that it has none.",
+     "pin": true
+    },
+    {
+     "name": "Slayer's Prey",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "As a bonus action, designate one creature you can see within 60 feet. The first time each turn you hit it with a weapon attack, it takes an extra 1d6 damage. Lasts until you finish a short or long rest, or designate a different creature."
+    },
+    {
+     "name": "Supernatural Defense",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "Whenever your Slayer's Prey target forces you to make a saving throw, or you make an ability check to escape its grapple, add 1d6 to the roll."
+    },
+    {
+     "name": "Magic-User's Nemesis",
+     "uses": "Once per short or long rest",
+     "max": 1,
+     "used": 0,
+     "text": "When you see a creature within 60 feet cast a spell or teleport, you can use your reaction to try to stop it. The creature makes a Wisdom saving throw against your spell save DC. On a failure, its spell or teleport fails and is wasted.",
+     "pin": true
+    },
+    {
+     "name": "Slayer's Counter",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "When your Slayer's Prey target forces you to make a saving throw, you can use your reaction to make one weapon attack against it, before the save. If the attack hits, you automatically succeed on the save, in addition to the attack's normal effects."
+    }
+   ]
+  },
+  {
+   "id": "background",
+   "kind": "Background",
+   "title": "Outlander",
+   "intro": "She grew up in the wilds, far from civilization.",
+   "items": [
+    {
+     "name": "Wanderer",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "You have an excellent memory for maps and geography, and can always recall the general layout of terrain, settlements, and other features around you. You can find food and fresh water for yourself and up to five other people each day, as long as the land offers berries, small game, water, and so on."
+    },
+    {
+     "name": "Proficiencies",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "Skills: Athletics, Survival\nTools: Lute\nLanguages: one of your choice"
+    }
+   ]
+  },
+  {
+   "id": "feats",
+   "kind": "Feats",
+   "title": "Feats",
+   "intro": "",
+   "items": [
+    {
+     "name": "Dual Wielder",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "+1 AC while wielding a separate melee weapon in each hand. You can fight with two weapons even when the one-handed melee weapons aren't light, and you can draw or stow two one-handed weapons when you would normally draw or stow one.\n\nWith the Fangs: she can dual-wield rapiers (not light weapons) because of this feat, and it is part of her AC 18."
+    },
+    {
+     "name": "Lucky",
+     "uses": "3 luck points per long rest",
+     "max": 3,
+     "used": 0,
+     "text": "Spend a luck point to roll an extra d20 on an attack roll, ability check, or saving throw, after you roll but before the outcome. Choose which d20 to use. You can also spend one when you're attacked: roll a d20 and choose whether the attacker uses their roll or yours.",
+     "pin": true
+    },
+    {
+     "name": "Mobile",
+     "uses": "",
+     "max": null,
+     "used": 0,
+     "text": "Your speed increases by 10 feet. When you Dash, difficult terrain doesn't cost you extra movement that turn. When you make a melee attack against a creature, it can't make opportunity attacks against you for the rest of the turn, whether you hit or not."
+    }
+   ]
+  }
+ ],
+ "equipment": {
+  "coins": {
+   "cp": null,
+   "sp": null,
+   "ep": null,
+   "gp": 250,
+   "pp": null
+  },
+  "items": [
+   {
+    "name": "Linxa'Kasendalor's Fangs (2 rapiers, +2)",
+    "qty": 2,
+    "weight": 2,
+    "notes": "Homebrew. 3d6 damage, 1d6 of it lightning. Lets her attack twice with her off hand (bonus action).",
+    "equipped": true
+   },
+   {
+    "name": "Mithril half plate",
+    "qty": 1,
+    "weight": 40,
+    "notes": "AC 15 + Dex (max 2). No Stealth disadvantage, no Strength requirement.",
+    "equipped": true
+   },
+   {
+    "name": "Metal band (bracelet)",
+    "qty": 1,
+    "weight": null,
+    "notes": "Magic. Resistance to magic and fire damage. Ask the DM exactly what 'resistance to magic' covers and whether it needs attunement.",
+    "equipped": true
+   },
+   {
+    "name": "Unnamed ring",
+    "qty": 1,
+    "weight": null,
+    "notes": "Magic, attuned. Absorbs lightning, glows purple before the lightning comes. See The Storm in Features & Traits.",
+    "equipped": true
+   },
+   {
+    "name": "Rations (1 day)",
+    "qty": 11,
+    "weight": 2,
+    "notes": "",
+    "equipped": false
+   },
+   {
+    "name": "Throwing rocks",
+    "qty": null,
+    "weight": null,
+    "notes": "For Lightning Arrow",
+    "equipped": false
+   }
+  ],
+  "notes": "",
+  "components": "Component pouch or druidic focus: not on her gear list yet. Ask the DM whether she has one. Spells without a gold cost need it.\n\nRevivify: diamonds worth 300 gp, used up when cast. She has none right now, so she can't cast Revivify.\nMagic Circle: holy water or powdered silver and iron worth 100 gp, used up when cast.\nSummon Elemental: a gold-inlaid vial worth 400 gp. Not used up, but she has to own one. Does she?"
+ },
+ "character": {
+  "age": "",
+  "height": "",
+  "weight": "",
+  "eyes": "Faint purple lightning",
+  "hair": "",
+  "skin": "",
+  "appearance": "Faint purple lightning flickers in her eyes. It glows brighter whenever the Storm's lightning happens.",
+  "backstory": "",
+  "allies": "",
+  "art": [
+   {
+    "path": "art/muzqx19e91jm.jpg",
+    "caption": ""
+   }
+  ]
+ },
+ "notes": [
+  {
+   "title": "Code Names",
+   "text": ""
+  },
+  {
+   "title": "Towns & Places",
+   "text": "Lava and obsidian landscape: where the party is now. Ruled by a fire dragon."
+  },
+  {
+   "title": "People",
+   "text": "Balasar (the Void, the Prince): what Fernrel saw that caused The Storm's corruption.\nFire dragon: rules the lava and obsidian landscape."
+  },
+  {
+   "title": "Dice",
+   "text": "2d20\n4d8\n   - Purple Metal\n"
+  },
+  {
+   "title": "Session Notes",
+   "text": "Most recent session: the ring glowed and she made a Wisdom save (a first). Then a Storm-possessed lightning drake attacked her. Before it died it said \"I'll be back,\" probably Balasar speaking through it."
+  }
+ ]
+}
