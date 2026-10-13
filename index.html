@@ -133,6 +133,10 @@ h3 { font-family: var(--display); font-weight: 400; font-size: 1.1rem; margin: 0
 .checks { display: flex; flex-direction: column; gap: 1px; }
 .check { display: grid; grid-template-columns: 18px 2.4em minmax(0, 1fr) auto; align-items: center; gap: 6px; font-size: .95rem; padding: 1px 0; }
 .check .val { font-variant-numeric: tabular-nums; text-align: right; font-family: var(--ui); }
+.check .ft { font-family: var(--ui); font-size: .74rem; color: var(--accent); white-space: nowrap; display: inline-block; }
+.check .sk-name { min-width: 0; overflow-wrap: break-word; }
+.check.sk { grid-template-columns: 18px 2.4em minmax(0, 1fr); }
+.check .sk-name .ab-tag { white-space: nowrap; }
 .check .ab-tag { font-family: var(--ui); font-size: .72rem; color: var(--muted); }
 .dot { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--muted); background: none; padding: 0; }
 .dot.on { background: var(--accent); border-color: var(--accent); }
@@ -280,7 +284,7 @@ td input[type="checkbox"] { accent-color: var(--accent); width: 16px; height: 16
 .zap { animation: zap .6s ease-out; }
 .loading { padding: 60px 0; color: var(--muted); font-style: italic; }
 
-@media (max-width: 1100px) {
+@media (max-width: 1360px) {
   .sheet { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .sheet .col-c { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
 }
@@ -400,7 +404,10 @@ function vSheet() {
   const id = [["sheet.classLevel","Class & Level","Ranger 15"],["sheet.subclass","Subclass",""],["sheet.background","Background","Outlander"],["sheet.race","Race",""],["sheet.alignment","Alignment","Chaotic Good"],["sheet.player","Player",""],["sheet.xp","Experience","Milestone"]];
   const abil = ABIL.map(([k, n]) => `<div class="ab"><div class="label">${n}</div><div class="mod" data-calc="mod:${k}"></div>${N("sheet.abilities." + k, { label: n + " score" })}</div>`).join("");
   const saves = ABIL.map(([k, n]) => `<div class="check"><button class="dot${s.saves[k] ? " on" : ""}" data-act="prof" data-p="sheet.saves.${k}" data-max="1" ${editing ? "" : "disabled"} aria-label="${n} save proficiency"></button><span class="val" data-calc="save:${k}"></span><span>${n}</span><span></span></div>`).join("");
-  const skills = SKILLS.map(([n, a]) => { const lv = s.skills[n] || 0; return `<div class="check"><button class="dot${lv === 1 ? " on" : lv === 2 ? " ex" : ""}" data-act="prof" data-p="sheet.skills.${n}" data-max="2" ${editing ? "" : "disabled"} aria-label="${n} proficiency"></button><span class="val" data-calc="skill:${n}"></span><span>${n}</span><span class="ab-tag">${a.toUpperCase()}</span></div>`; }).join("");
+  // Natural Explorer doubles proficiency on proficient Int/Wis checks tied to her favored terrains
+  const ne = S.features.flatMap(g => g.items).find(it => /^Natural Explorer/.test(it.name));
+  const terrains = ne ? ((ne.text || "").match(/^Favored terrains:\s*(.*)$/m) || [])[1] || "" : "";
+  const skills = SKILLS.map(([n, a]) => { const lv = s.skills[n] || 0; const ft = ne && lv === 1 && (a === "int" || a === "wis") && pb(); return `<div class="check sk"><button class="dot${lv === 1 ? " on" : lv === 2 ? " ex" : ""}" data-act="prof" data-p="sheet.skills.${n}" data-max="2" ${editing ? "" : "disabled"} aria-label="${n} proficiency"></button><span class="val" data-calc="skill:${n}"></span><span class="sk-name">${n} <span class="ab-tag">${a.toUpperCase()}</span>${ft ? ` <span class="ft" title="Natural Explorer${terrains ? ": " + esc(terrains) : ""}">(+${ft} in favored terrain)</span>` : ""}</span></div>`; }).join("");
   const atkRows = s.attacks.map((a, i) => `<tr><td>${T(`sheet.attacks.${i}.name`, { ph: "Shortsword" })}</td><td class="n">${T(`sheet.attacks.${i}.bonus`, { ph: "+9" })}</td><td>${T(`sheet.attacks.${i}.damage`, { ph: "1d6+5 piercing" })}</td>${editing ? `<td><button class="x" data-act="del" data-p="sheet.attacks" data-i="${i}" aria-label="Remove attack">✕</button></td>` : ""}</tr>`).join("");
   const traits = [["personality","Personality Traits"],["ideals","Ideals"],["bonds","Bonds"],["flaws","Flaws"]].map(([k, n]) => `<div class="box trait-box" id="sec-${k}">${T("sheet." + k, { multi: true, ph: "Write here", ro: "—" })}<div class="label box-title">${n}</div></div>`).join("");
   const pinned = [];
