@@ -178,6 +178,15 @@ h3 { font-family: var(--display); font-weight: 400; font-size: 1.1rem; margin: 0
 .pip.mark { background: transparent; border-color: var(--muted); }
 .pip.mark.succ.on { background: var(--good); border-color: var(--good); }
 .pip.mark.fail.on { background: var(--bad); border-color: var(--bad); }
+.ac-note { padding-inline: 4px; }
+.vital .ac-note .ed { font-family: var(--ui); font-size: .74rem; color: var(--muted); line-height: 1.25; display: inline; }
+.cond-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.cond { font-family: var(--ui); font-size: .8rem; padding: 4px 10px; min-height: 32px; border-radius: 999px; border: 1px solid var(--line); background: none; color: var(--muted); }
+.cond.on { background: var(--bad); border-color: var(--bad); color: #1a0f12; font-weight: 700; }
+.exh-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.pip.mark.exh.on { background: var(--bad); border-color: var(--bad); }
+.cond-fx { margin: 10px 0 0; padding-left: 18px; font-size: .9rem; display: grid; gap: 4px; }
+.cond-fx b { color: var(--bad); }
 .ds { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; align-items: center; font-family: var(--ui); font-size: .9rem; }
 
 table { border-collapse: collapse; width: 100%; }
@@ -427,7 +436,7 @@ function vSheet() {
     </div>
     <div class="stack">
       <div class="vitals">
-        <div class="vital shield"><div class="label">Armor Class</div>${N("sheet.ac", { label: "Armor class" })}</div>
+        <div class="vital shield"><div class="label">Armor Class</div>${N("sheet.ac", { label: "Armor class" })}${s.acNote || editing ? `<div class="ac-note">${T("sheet.acNote", { ph: "Note, e.g. 17 without both rapiers" })}</div>` : ""}</div>
         <div class="vital"><div class="label">Initiative</div><div class="v" data-calc="init"></div>${editing ? `<div class="see">bonus ${N("sheet.initBonus", { label: "Extra initiative bonus", ph: "0" })}</div>` : ""}</div>
         <div class="vital"><div class="label">Speed</div>${T("sheet.speed", { ph: "40 ft", ro: "—" })}</div>
       </div>
@@ -437,6 +446,7 @@ function vSheet() {
         <div class="sub"><div class="label">Hit Dice (${T("sheet.hitDice", { ph: "d10" })})</div>${(num(s.hitDiceTotal) || 0) > 0 ? pips("sheet.hitDiceUsed", num(s.hitDiceTotal), s.hitDiceUsed || 0) : `<span class="see">${editing ? "" : "Set total in Edit"}</span>`}${editing ? `<span class="see">total ${N("sheet.hitDiceTotal", { label: "Hit dice total", ph: "15" })}</span>` : ""}</div>
       </div>
       <div class="box"><div class="ds"><span class="label">Successes</span>${marks("sheet.deathSuccess", s.deathSuccess || 0, "succ")}<span class="label">Failures</span>${marks("sheet.deathFail", s.deathFail || 0, "fail")}</div><div class="label box-title">Death Saves</div></div>
+      ${vConditions(s)}
       <div class="box" id="sec-attacks">
         <div class="tablewrap"><table><thead><tr><th>Name</th><th>Atk Bonus</th><th>Damage / Type</th>${editing ? "<th></th>" : ""}</tr></thead><tbody>${atkRows || `<tr><td colspan="3" class="empty">${editing ? "Add her weapons below." : "No attacks yet. Click Edit to add them."}</td></tr>`}</tbody></table></div>
         ${editing ? `<p><button class="btn small" data-act="add" data-p="sheet.attacks" data-tpl="attack">Add attack</button></p>` : ""}
@@ -453,6 +463,36 @@ function vSheet() {
       <p class="see">Features, traits and feats live in <button class="link" data-act="tab" data-tab="features">Features & Traits</button>. Gear lives in <button class="link" data-act="tab" data-tab="equipment">Equipment</button>.</p>
     </div>
   </div>`;
+}
+
+const CONDITIONS = [
+  ["Blinded", "Can't see and fails any check that needs sight. Attacks against her have advantage; her attacks have disadvantage."],
+  ["Charmed", "Can't attack the charmer or target it with harmful effects. The charmer has advantage on social checks with her. (Fey Ancestry: advantage on saves against this.)"],
+  ["Deafened", "Can't hear and fails any check that needs hearing."],
+  ["Frightened", "Disadvantage on ability checks and attacks while the source is in sight. Can't willingly move closer to it."],
+  ["Grappled", "Speed is 0. Ends if the grappler is incapacitated or she's moved out of its reach."],
+  ["Incapacitated", "Can't take actions or reactions."],
+  ["Invisible", "Can't be seen without magic. Her attacks have advantage; attacks against her have disadvantage."],
+  ["Paralyzed", "Incapacitated, can't move or speak. Fails Strength and Dexterity saves. Attacks against her have advantage, and hits from within 5 ft are critical hits."],
+  ["Petrified", "Turned to stone: incapacitated, can't move or speak. Resistance to all damage. Fails Strength and Dexterity saves; attacks against her have advantage."],
+  ["Poisoned", "Disadvantage on attack rolls and ability checks."],
+  ["Prone", "Can only crawl unless she stands (costs half her speed). Disadvantage on her attacks. Attacks within 5 ft have advantage against her; farther ones have disadvantage."],
+  ["Restrained", "Speed is 0. Disadvantage on her attacks and Dexterity saves; attacks against her have advantage."],
+  ["Stunned", "Incapacitated, can't move, speaks only falteringly. Fails Strength and Dexterity saves; attacks against her have advantage."],
+  ["Unconscious", "Incapacitated, can't move or speak, drops what she's holding and falls prone. Fails Strength and Dexterity saves. Attacks against her have advantage, and hits from within 5 ft are critical hits."]
+];
+const EXHAUSTION = ["", "Disadvantage on ability checks", "Speed halved", "Disadvantage on attack rolls and saving throws", "Hit point maximum halved", "Speed reduced to 0", "Death"];
+function vConditions(s) {
+  const on = s.conditions || [], ex = s.exhaustion || 0;
+  const chips = CONDITIONS.map(([c, d]) => `<button class="cond${on.includes(c) ? " on" : ""}" data-act="cond" data-c="${c}" title="${esc(d)}" aria-pressed="${on.includes(c)}">${c}</button>`).join("");
+  const pips = [1, 2, 3, 4, 5, 6].map(i => `<button class="pip mark exh${i <= ex ? " on" : ""}" data-act="exh" data-i="${i}" aria-label="Exhaustion level ${i}${i <= ex ? ", marked" : ""}" title="Level ${i}: ${EXHAUSTION[i]}"></button>`).join("");
+  const effects = [...CONDITIONS.filter(([c]) => on.includes(c)).map(([c, d]) => `<li><b>${c}:</b> ${esc(d)}</li>`),
+    ...(ex ? [`<li><b>Exhaustion ${ex}:</b> ${EXHAUSTION.slice(1, ex + 1).join("; ")}.</li>`] : [])].join("");
+  return `<div class="box conds" id="sec-conditions">
+    <div class="cond-chips">${chips}</div>
+    <div class="exh-row"><span class="label">Exhaustion</span><span class="pips">${pips}</span><span class="see">${ex ? `Level ${ex}` : "None"}</span></div>
+    ${effects ? `<ul class="cond-fx">${effects}</ul>` : `<p class="see">Tap a condition when it applies. Its effects show here.</p>`}
+    <div class="label box-title">Conditions</div></div>`;
 }
 
 function vSpells() {
@@ -667,6 +707,8 @@ app.addEventListener("click", e => {
     ui.confirmRest = false;
     kind === "long" ? longRest() : shortRest(); render(); changed(true); return;
   }
+  if (act === "cond") { const c = b.dataset.c, list = S.sheet.conditions || (S.sheet.conditions = []), i = list.indexOf(c); i < 0 ? list.push(c) : list.splice(i, 1); render(); changed(true); return; }
+  if (act === "exh") { const i = +b.dataset.i, v = S.sheet.exhaustion || 0; S.sheet.exhaustion = i === v ? i - 1 : i; render(); changed(true); return; }
   if (act === "goto") { goTo(b.dataset.tab, b.dataset.target, b.dataset.l); return; }
   if (act === "side") { ui.side = !ui.side; try { localStorage.setItem("side", ui.side ? "open" : "closed"); } catch (x) {} render(); return; }
   if (act === "spelltab") { ui.spell = b.dataset.l; try { localStorage.setItem("spell", ui.spell); } catch (x) {} render(); return; }
@@ -759,7 +801,8 @@ function longRest() {
   let feats = 0;
   S.features.forEach(g => g.items.forEach(it => { if (num(it.max) && /long rest/i.test(it.uses || "") && it.used) { it.used = 0; feats++; } }));
   s.tranceSkill = ""; s.tranceTool = "";
-  toast(`Long rest finished. HP full, spell slots back, ${back} hit ${back === 1 ? "die" : "dice"} regained, ${feats} feature${feats === 1 ? "" : "s"} recharged. Pick new Astral Trance proficiencies.`);
+  const exBefore = s.exhaustion || 0; if (exBefore) s.exhaustion = exBefore - 1;
+  toast(`Long rest finished. HP full, spell slots back, ${back} hit ${back === 1 ? "die" : "dice"} regained, ${feats} feature${feats === 1 ? "" : "s"} recharged.${exBefore ? ` Exhaustion down to ${exBefore - 1} (if she ate and drank).` : ""} Pick new Astral Trance proficiencies.`);
 }
 function toast(msg) {
   const t = document.createElement("div"); t.className = "toast"; t.setAttribute("role", "status"); t.textContent = msg;

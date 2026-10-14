@@ -62,7 +62,7 @@
     "damage": "4d8 lightning (half on a miss) + 2d8 burst, DC 18 Dex"
    }
   ],
-  "attackNotes": "Attack action: 2 attacks (Extra Attack).\nBonus action: 2 off-hand attacks, granted by Linxa'Kasendalor's Fangs.\nSlayer's Prey: +1d6 the first time each turn you hit the marked target.\n\nBonus action conflict: Lightning Arrow, Slayer's Prey, Starlight Step and the off-hand attacks all use your bonus action, so you get one per turn.\n\n*Rock: an improvised thrown weapon normally uses Strength (+1) without proficiency. Ask your DM whether she can use Dexterity and proficiency (+10).",
+  "attackNotes": "Attack action: 2 attacks (Extra Attack).\nBonus action: 2 off-hand attacks, granted by Linxa'Kasendalor's Fangs.\nSlayer's Prey: +1d6 the first time each turn you hit the marked target.\n\nBonus action conflict: Lightning Arrow, Slayer's Prey, Starlight Step and the off-hand attacks all use your bonus action, so you get one per turn.\n\n*Rock: an improvised thrown weapon normally uses Strength (+1) without proficiency. Ask your DM whether she can use Dexterity and proficiency (+10).\n\nReaction conflict: Magic-User's Nemesis, Slayer's Counter and opportunity attacks all use her reaction, so she gets one per round.\n\nConcentration: she can hold only one concentration spell at a time (Lightning Arrow, Pass without Trace, Protection from Evil and Good, Summon Elemental, Banishment). When she takes damage while concentrating, she makes a Constitution save at +4: DC 10, or half the damage if that's higher. Failing ends the spell. Lucky can reroll it.",
   "proficiencies": "Armor: light, medium, shields\nWeapons: simple, martial\nTools: Lute (from Outlander)\nLanguages: Common, Elvish, Draconic, Abyssal/Infernal (one language in this world), Celestial, Deep Speech",
   "personality": "",
   "ideals": "",
@@ -70,7 +70,10 @@
   "flaws": "",
   "defenses": "Resistance: fire (metal band)\nResistance to magic (metal band). Ask the DM exactly what this covers.\nAdvantage on saves against being charmed (Fey Ancestry)\n+1d6 to saves forced by her Slayer's Prey target (Supernatural Defense)\nReaction: weapon attack before a save forced by her Slayer's Prey target; on a hit she automatically succeeds (Slayer's Counter)\n\nSenses: darkvision 60 ft, passive Perception 20",
   "tranceSkill": "",
-  "tranceTool": ""
+  "tranceTool": "",
+  "acNote": "17 without both rapiers",
+  "conditions": [],
+  "exhaustion": 0
  },
  "spells": {
   "ability": "wis",
@@ -207,9 +210,9 @@
      "components": "V, S, M (a piece of cork)",
      "duration": "1 hour",
      "conc": false,
-     "ritual": true,
+     "ritual": false,
      "tag": "",
-     "text": "Up to ten willing creatures you can see within range can move across any liquid surface (water, acid, mud, snow, quicksand, lava) as if it were harmless solid ground. Creatures crossing molten lava still take damage from the heat.\n\nIf you target a creature that's submerged, it's carried toward the surface at 60 feet per round."
+     "text": "Up to ten willing creatures you can see within range can move across any liquid surface (water, acid, mud, snow, quicksand, lava) as if it were harmless solid ground. Creatures crossing molten lava still take damage from the heat.\n\nIf you target a creature that's submerged, it's carried toward the surface at 60 feet per round.\n\nRangers can't cast rituals, so this always uses a 3rd-level slot."
     },
     {
      "name": "Magic Circle",
@@ -299,7 +302,7 @@
      "name": "Starlight Step",
      "uses": "Proficiency bonus (5) per long rest",
      "max": 5,
-     "used": 2,
+     "used": 0,
      "text": "As a bonus action, you magically teleport up to 30 feet to an unoccupied space you can see.\n\nFor Fernrel this is Storm lightning: the purple lightning in her eyes glows when she teleports.",
      "pin": true
     },
@@ -429,7 +432,7 @@
      "name": "Hunter's Sense",
      "uses": "Wisdom modifier (5) per long rest",
      "max": 5,
-     "used": 3,
+     "used": 0,
      "text": "As an action, choose one creature you can see within 60 feet. You learn its damage immunities, resistances, and vulnerabilities. If it's hidden from divination magic, you sense that it has none.",
      "pin": true
     },
