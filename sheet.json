@@ -38,11 +38,11 @@
   "speed": "40 ft",
   "initBonus": null,
   "hpMax": 154,
-  "hpCur": 154,
+  "hpCur": 33,
   "hpTemp": null,
   "hitDice": "d10",
   "hitDiceTotal": 16,
-  "hitDiceUsed": 0,
+  "hitDiceUsed": 3,
   "deathSuccess": 0,
   "deathFail": 0,
   "attacks": [
@@ -92,7 +92,7 @@
    },
    "4": {
     "max": 2,
-    "used": 0
+    "used": 2
    }
   },
   "list": {
@@ -183,7 +183,7 @@
     {
      "name": "Lightning Arrow",
      "castingTime": "1 bonus action",
-     "range": "Self",
+     "range": "Self / 60ft Thrown",
      "components": "V, S",
      "duration": "Up to 1 minute",
      "conc": true,
@@ -326,7 +326,7 @@
      "uses": "",
      "max": null,
      "used": 0,
-     "text": "Source: she saw Balasar (the Void, the Prince) and was changed.\nGives her: lightning abilities and her astral elf traits, including Starlight Step.\nTell: faint purple lightning in her eyes, which glows brighter whenever the Storm's lightning happens (teleporting, or lightning from her hand).\nRisk: NPCs warn that using the lightning may feed the corruption.\nSafe: Lightning Arrow and the lightning damage from her rapiers don't count (confirmed by the DM)."
+     "text": "Source: she saw Balasar (the Void, the Prince) and was changed.\nGives her: lightning abilities and her astral elf traits, including Starlight Step.\nTell: faint purple lightning in her eyes, which glows brighter whenever the Storm's lightning happens (teleporting, or lightning from her hand).\nRisk: NPCs warn that using the lightning may feed the corruption.\nSafe: Lightning Arrow and the lightning damage from her rapiers don't count (not confirmed by the DM)."
     },
     {
      "name": "Unnamed Ring (attuned)",
@@ -506,7 +506,7 @@
      "name": "Lucky",
      "uses": "3 luck points per long rest",
      "max": 3,
-     "used": 0,
+     "used": 1,
      "text": "Spend a luck point to roll an extra d20 on an attack roll, ability check, or saving throw, after you roll but before the outcome. Choose which d20 to use. You can also spend one when you're attacked: roll a d20 and choose whether the attacker uses their roll or yours.",
      "pin": true
     },
