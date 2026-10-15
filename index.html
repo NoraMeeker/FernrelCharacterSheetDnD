@@ -14,6 +14,7 @@
   --side: #0b0910;
   --side-ink: #ddd6ee;
   --side-muted: #8a83a0;
+  --trance: #6cb8ff;
   --good: #6fd19c;
   --bad: #ff8a80;
   --bolt: #c9a6ff;
@@ -141,6 +142,8 @@ h3 { font-family: var(--display); font-weight: 400; font-size: 1.1rem; margin: 0
 .dot.on { background: var(--accent); border-color: var(--accent); }
 .dot.ex { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 2px var(--panel), 0 0 0 3.5px var(--accent); }
 .dot:disabled { cursor: default; }
+.dot.tr { background: var(--trance); border-color: var(--trance); box-shadow: 0 0 8px -1px var(--trance); }
+.dot.pick:hover { border-color: var(--trance); }
 .box-title { text-align: center; margin-top: 8px; }
 
 .quick { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
@@ -360,7 +363,8 @@ const num = v => v == null || v === "" ? null : Number(v);
 const mod = a => { const s = num(S.sheet.abilities[a]); return s == null ? null : Math.floor((s - 10) / 2); };
 const pb = () => num(S.sheet.prof);
 function saveVal(a) { const m = mod(a); if (m == null) return null; return m + (S.sheet.saves[a] ? (pb() || 0) : 0); }
-function skillVal(name, a) { const m = mod(a); if (m == null) return null; const lv = S.sheet.skills[name] || 0; return m + lv * (pb() || 0); }
+const tranceSkill = () => { const t = (S.sheet.tranceSkill || "").trim().toLowerCase(); return SKILLS.find(([n]) => n.toLowerCase() === t)?.[0]; };
+function skillVal(name, a) { const m = mod(a); if (m == null) return null; const lv = S.sheet.skills[name] || (tranceSkill() === name ? 1 : 0); return m + lv * (pb() || 0); }
 const passive = () => { const v = skillVal("Perception", "wis"); return v == null ? null : 10 + v; };
 const init = () => { const m = mod("dex"); if (m == null) return null; return m + (num(S.sheet.initBonus) || 0); };
 const spellMod = () => mod(S.spells.ability || "wis");
@@ -377,6 +381,8 @@ function refreshCalc() {
     const [k, arg] = el.dataset.calc.split(":");
     el.textContent = CALC[k](arg);
   });
+  const tr = tranceSkill();
+  app.querySelectorAll(".dot.pick").forEach(d => { const on = d.dataset.skill === tr; d.classList.toggle("tr", on); d.setAttribute("aria-pressed", on); });
   const bar = app.querySelector(".hpbar span");
   if (bar) { const m = num(S.sheet.hpMax), c = num(S.sheet.hpCur); bar.style.width = m && c != null ? Math.max(0, Math.min(100, c / m * 100)) + "%" : "0%"; }
 }
@@ -415,7 +421,7 @@ function vSheet() {
   // Natural Explorer doubles proficiency on proficient Int/Wis checks tied to her favored terrains
   const ne = S.features.flatMap(g => g.items).find(it => /^Natural Explorer/.test(it.name));
   const terrains = ne ? ((ne.text || "").match(/^Favored terrains:\s*(.*)$/m) || [])[1] || "" : "";
-  const skills = SKILLS.map(([n, a]) => { const lv = s.skills[n] || 0; const ft = ne && lv === 1 && (a === "int" || a === "wis") && pb(); return `<div class="check sk"><button class="dot${lv === 1 ? " on" : lv === 2 ? " ex" : ""}" data-act="prof" data-p="sheet.skills.${n}" data-max="2" ${editing ? "" : "disabled"} aria-label="${n} proficiency"></button><span class="val" data-calc="skill:${n}"></span><span class="sk-name">${n}${ft ? ` <span class="ft" title="Natural Explorer${terrains ? ": " + esc(terrains) : ""}">(+${ft} in favored terrain)</span>` : ""}</span><span class="ab-tag">${a.toUpperCase()}</span></div>`; }).join("");
+  const skills = SKILLS.map(([n, a]) => { const lv = s.skills[n] || 0; const ft = ne && lv === 1 && (a === "int" || a === "wis") && pb(); return `<div class="check sk">${editing || lv ? `<button class="dot${lv === 1 ? " on" : lv === 2 ? " ex" : ""}" data-act="prof" data-p="sheet.skills.${n}" data-max="2" ${editing ? "" : "disabled"} aria-label="${n} proficiency"></button>` : `<button class="dot pick" data-act="trance" data-skill="${n}" title="Astral Trance: proficient in ${n} until the next long rest" aria-label="Astral Trance proficiency in ${n}"></button>`}<span class="val" data-calc="skill:${n}"></span><span class="sk-name">${n}${ft ? ` <span class="ft" title="Natural Explorer${terrains ? ": " + esc(terrains) : ""}">(+${ft} in favored terrain)</span>` : ""}</span><span class="ab-tag">${a.toUpperCase()}</span></div>`; }).join("");
   const atkRows = s.attacks.map((a, i) => `<tr><td>${T(`sheet.attacks.${i}.name`, { ph: "Shortsword" })}</td><td class="n">${T(`sheet.attacks.${i}.bonus`, { ph: "+9" })}</td><td>${T(`sheet.attacks.${i}.damage`, { ph: "1d6+5 piercing" })}</td>${editing ? `<td><button class="x" data-act="del" data-p="sheet.attacks" data-i="${i}" aria-label="Remove attack">✕</button></td>` : ""}</tr>`).join("");
   const traits = [["personality","Personality Traits"],["ideals","Ideals"],["bonds","Bonds"],["flaws","Flaws"]].map(([k, n]) => `<div class="box trait-box" id="sec-${k}">${T("sheet." + k, { multi: true, ph: "Write here", ro: "—" })}<div class="label box-title">${n}</div></div>`).join("");
   const pinned = [];
@@ -430,7 +436,7 @@ function vSheet() {
         <div class="pill-row"><button class="dot${s.inspiration ? " on" : ""}" data-act="toggle" data-p="sheet.inspiration" aria-label="Inspiration"></button><span class="label">Inspiration</span></div>
         <div class="pill-row">${N("sheet.prof", { label: "Proficiency bonus", ph: "+?" })}<span class="label">Proficiency Bonus</span></div>
         <div class="box"><div class="checks">${saves}</div><div class="label box-title">Saving Throws</div></div>
-        <div class="box"><div class="checks">${skills}</div><div class="label box-title">Skills</div>${editing ? `<p class="see">Click a dot to cycle: none, proficient, expertise.</p>` : ""}</div>
+        <div class="box"><div class="checks">${skills}</div><div class="label box-title">Skills</div>${editing ? `<p class="see">Click a dot to cycle: none, proficient, expertise.</p>` : `<p class="see">Click an empty dot to pick her Astral Trance skill (blue) until the next long rest.</p>`}</div>
         <div class="pill-row"><span class="big" data-calc="passive"></span><span class="label">Passive Perception</span></div>
       </div>
     </div>
@@ -718,6 +724,7 @@ app.addEventListener("click", e => {
   if (act === "pip") { const i = +b.dataset.i, used = getP(p) || 0; setP(p, i < used ? i : i + 1); render(); changed(); return; }
   if (act === "mark") { const i = +b.dataset.i, v = getP(p) || 0; setP(p, i < v ? i : i + 1); render(); changed(); return; }
   if (act === "toggle") { setP(p, !getP(p)); render(); changed(true); return; }
+  if (act === "trance") { const n = b.dataset.skill; S.sheet.tranceSkill = tranceSkill() === n ? "" : n; render(); changed(true); return; }
   if (act === "prof") { const cur = getP(p) || 0, max = +b.dataset.max; setP(p, cur >= max ? 0 : cur + 1); render(); changed(); return; }
   if (act === "add") { getP(p).push(TPL[b.dataset.tpl]()); render(); changed(); const eds = app.querySelectorAll(`[data-p^="${p}.${getP(p).length - 1}."][contenteditable]`); eds[0]?.focus(); return; }
   if (act === "del") { getP(p).splice(+b.dataset.i, 1); render(); changed(); return; }
