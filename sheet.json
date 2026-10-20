@@ -77,7 +77,11 @@
   "prey": "Varaxxus",
   "concentration": "",
   "ringGlowing": false,
-  "noxPats": 0
+  "noxPats": 0,
+  "noxArt": [
+   "art/nox-1.jpg",
+   "art/nox-2.jpg"
+  ]
  },
  "spells": {
   "ability": "wis",
@@ -607,7 +611,7 @@
   },
   {
    "title": "People",
-   "text": "Balasar (the Void, the Prince): once an ancient Dragon Prince (a title; as far as Nora knows, he isn't a dragon). He refused to give up his rule when the arcanal plane crumbled in the millennia war. Now something eldritch living in the astral plane. He can only act through people who have given themselves to him, but his envoy (The Storm) spread his influence far and wide. Those it touched became \"stormborn,\" marked by purple lightning in their eyes. What Fernrel saw caused her corruption.\nTiamat'Akhastazar: the fire dragon. Rules the lava and obsidian landscape.\nThe ice dragon: found Fernrel passed out in the Thunderclap Wastes in her first session and nursed her back to health. She woke up with the dragon and the party around her.\n\nParty:\n• Arwen: female half-elf bard. The party's negotiator, usually the one talking. Engaged to Vexin.\n• Vexin: male Charred fighter. Arwen's fiancé. Leads people well in battle and is a very strong fighter. Tends to start the violence.\n• Nox: kobold fighter, ungendered but usually called \"he.\" Fernrel didn't like him at first (kobolds are one of her favored enemies), but now she finds him adorable. Nox likes headpats from Fernrel.\n• Freon: male Shamanesti engineer (a homebrew class similar to an artificer). Practical and mostly emotionless. Has very helpful constructs.\n• Huk: male kobold evocation wizard. Joined the campaign 3 sessions before Oct 14. Not much known about him yet.\n\nMelarin: runs the weapons-making operation. Ordered Tiamat'Akhastezes to \"murder them all.\"\nTiamat'Akhastezes: a dragon, the son of the fire dragon Tiamat'Akhastazar. Fights for Melarin. Hits hard and casts a massive fireball (52 damage to Fernrel).\nThe Scientist: arrived with Melarin. Unknown so far.\nVaraxxus: uses magical chains and speaks Deep Speech. Unknown creature type. Fernrel first met him a few sessions ago: she picked up a rock carved with writing she couldn't read, it whispered unintelligible things, she made a Wisdom save, and he appeared. The party got him low before he teleported or vanished. On Oct 14 he targeted Fernrel specifically and told her, \"You know prey.\" Currently her Slayer's Prey target. He didn't even bat an eye at a random elf speaking Deep Speech.\n\nThunderclap Wastes people (Linxa'Kasendalor, Malafit, Sers'rass, Ghielis): see The World tab."
+   "text": "Balasar (the Void, the Prince): once an ancient Dragon Prince (a title; as far as Nora knows, he isn't a dragon). He refused to give up his rule when the arcanal plane crumbled in the millennia war. Now something eldritch living in the astral plane. He can only act through people who have given themselves to him, but his envoy (The Storm) spread his influence far and wide. Those it touched became \"stormborn,\" marked by purple lightning in their eyes. What Fernrel saw caused her corruption.\nTiamat'Akhastazar: the fire dragon. Rules the lava and obsidian landscape.\nThe ice dragon: found Fernrel passed out in the Thunderclap Wastes in her first session and nursed her back to health. She woke up with the dragon and the party around her.\n\nParty:\n• Arwen: female half-elf bard. The party's negotiator, usually the one talking. Engaged to Vexin.\n• Vexin: male Charred fighter. Arwen's fiancé. Leads people well in battle and is a very strong fighter. Tends to start the violence.\n• Nox: kobold fighter, ungendered but usually called \"he.\" Fernrel didn't like him at first (kobolds are one of her favored enemies), but now she finds him adorable. Nox likes headpats from Fernrel.\n• Freon: male Shamanesti engineer (a homebrew class similar to an artificer). Practical and mostly emotionless. Has very helpful constructs.\n• Huk: male kobold evocation wizard. Joined the campaign 3 sessions before Oct 14. Not much known about him yet.\n\nMelarin: runs the weapons-making operation. Ordered Tiamat'Akhastezes to \"murder them all.\"\nTiamat'Akhastezes: a dragon, the son of the fire dragon Tiamat'Akhastazar. Fights for Melarin. Hits hard and casts a massive fireball (52 damage to Fernrel).\nThe Scientist: arrived with Melarin. Unknown so far.\nVaraxxus: uses magical chains and speaks Deep Speech. Looks stony and plated, with tendrils and rusty chains, and purple lightning in his eye, like the stormborn (picture on The World tab). Unknown creature type. Fernrel first met him a few sessions ago: she picked up a rock carved with writing she couldn't read, it whispered unintelligible things, she made a Wisdom save, and he appeared. The party got him low before he teleported or vanished. On Oct 14 he targeted Fernrel specifically and told her, \"You know prey.\" Currently her Slayer's Prey target. He didn't even bat an eye at a random elf speaking Deep Speech.\n\nThunderclap Wastes people (Linxa'Kasendalor, Malafit, Sers'rass, Ghielis): see The World tab."
   },
   {
    "title": "Dice",
@@ -661,7 +665,8 @@
      "label": "Fernrel",
      "group": "self",
      "x": 500,
-     "y": 330
+     "y": 330,
+     "img": "art/muzqx19e91jm.jpg"
     },
     {
      "id": "arwen",
@@ -682,7 +687,8 @@
      "label": "Nox",
      "group": "party",
      "x": 110,
-     "y": 400
+     "y": 400,
+     "img": "art/nox-face.jpg"
     },
     {
      "id": "freon",
@@ -738,7 +744,8 @@
      "label": "Varaxxus",
      "group": "foe",
      "x": 700,
-     "y": 490
+     "y": 490,
+     "img": "art/varaxxus.jpg"
     },
     {
      "id": "tiamat",
