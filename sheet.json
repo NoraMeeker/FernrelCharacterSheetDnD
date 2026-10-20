@@ -76,7 +76,8 @@
   "exhaustion": 0,
   "prey": "Varaxxus",
   "concentration": "",
-  "ringGlowing": false
+  "ringGlowing": false,
+  "noxPats": 0
  },
  "spells": {
   "ability": "wis",
@@ -343,7 +344,7 @@
      "uses": "",
      "max": null,
      "used": 0,
-     "text": "A few sessions ago: she watched the ring start to glow. The glow spread up her arm and she felt strange. She reached out, ready to use Starlight Step, but she didn't teleport. A ball of lightning shot from her hand instead. That was the first and only time so far.\n\nThe session before Oct 14: the ring lit up and she had to make a Wisdom saving throw. This was also a first, so the corruption may be getting worse.\n\nRight after that save, a lightning drake attacked her. It seemed to be possessed by the Storm, and a lightning drake didn't fit the lava and obsidian land around them. Just before she killed it, it said \"I'll be back.\" She suspects Balasar was speaking through it, not the drake.\n\nHer Wisdom save is +5 (she isn't proficient). Lucky lets her roll an extra d20 on saving throws.\n\nOct 14: the ring glowed again in the middle of the boss fight, right after Varaxxus's chains and the fireball. She had already used her action and bonus action, so she didn't use it. The DM seemed a little disappointed, as if something big would have happened.\n\nLog new signs here:\n• Oct 20, 2026: the ring glowed. (Not a session, just testing)"
+     "text": "Her Wisdom save is +5 (she isn't proficient). Lucky lets her roll an extra d20 on saving throws.\n\nEach line starting with • is one sign. The more signs, the stormier the whole sheet gets.\n\n• A few sessions ago: she watched the ring start to glow. The glow spread up her arm and she felt strange. She reached out, ready to use Starlight Step, but she didn't teleport. A ball of lightning shot from her hand instead. That was the first and only time so far.\n• The session before Oct 14: the ring lit up and she had to make a Wisdom saving throw. This was also a first, so the corruption may be getting worse. Right after that save, a lightning drake attacked her. It seemed to be possessed by the Storm, and a lightning drake didn't fit the lava and obsidian land around them. Just before she killed it, it said \"I'll be back.\" She suspects Balasar was speaking through it, not the drake.\n• Oct 14: the ring glowed again in the middle of the boss fight, right after Varaxxus's chains and the fireball. She had already used her action and bonus action, so she didn't use it. The DM seemed a little disappointed, as if something big would have happened.\n"
     }
    ]
   },
@@ -652,6 +653,188 @@
     "title": "Dragons",
     "text": "There is only one dragon of each element: Linxa'Kasendalor is THE lightning dragon, Tiamat'Akhastazar is THE fire dragon, and there is one ice dragon. The only exception so far is Tiamat'Akhastazar's son, Tiamat'Akhastezes."
    }
-  ]
+  ],
+  "map": {
+   "nodes": [
+    {
+     "id": "fernrel",
+     "label": "Fernrel",
+     "group": "self",
+     "x": 500,
+     "y": 330
+    },
+    {
+     "id": "arwen",
+     "label": "Arwen",
+     "group": "party",
+     "x": 150,
+     "y": 110
+    },
+    {
+     "id": "vexin",
+     "label": "Vexin",
+     "group": "party",
+     "x": 110,
+     "y": 250
+    },
+    {
+     "id": "nox",
+     "label": "Nox",
+     "group": "party",
+     "x": 110,
+     "y": 400
+    },
+    {
+     "id": "freon",
+     "label": "Freon",
+     "group": "party",
+     "x": 160,
+     "y": 540
+    },
+    {
+     "id": "huk",
+     "label": "Huk",
+     "group": "party",
+     "x": 330,
+     "y": 600
+    },
+    {
+     "id": "ice",
+     "label": "The ice dragon",
+     "group": "ally",
+     "x": 330,
+     "y": 70
+    },
+    {
+     "id": "balasar",
+     "label": "Balasar",
+     "group": "power",
+     "x": 580,
+     "y": 60
+    },
+    {
+     "id": "ghielis",
+     "label": "Ghielis",
+     "group": "ally",
+     "x": 850,
+     "y": 110
+    },
+    {
+     "id": "linxa",
+     "label": "Linxa'Kasendalor",
+     "group": "power",
+     "x": 880,
+     "y": 260
+    },
+    {
+     "id": "dragonborn",
+     "label": "The dragonborn",
+     "group": "foe",
+     "x": 880,
+     "y": 400
+    },
+    {
+     "id": "varaxxus",
+     "label": "Varaxxus",
+     "group": "foe",
+     "x": 700,
+     "y": 490
+    },
+    {
+     "id": "tiamat",
+     "label": "Tiamat'Akhastezes",
+     "group": "foe",
+     "x": 560,
+     "y": 610
+    },
+    {
+     "id": "melarin",
+     "label": "Melarin",
+     "group": "foe",
+     "x": 860,
+     "y": 590
+    }
+   ],
+   "links": [
+    {
+     "a": "fernrel",
+     "b": "arwen",
+     "label": "attached to her"
+    },
+    {
+     "a": "fernrel",
+     "b": "vexin",
+     "label": "party"
+    },
+    {
+     "a": "fernrel",
+     "b": "nox",
+     "label": "adorable (headpats)"
+    },
+    {
+     "a": "fernrel",
+     "b": "freon",
+     "label": "both stormborn"
+    },
+    {
+     "a": "fernrel",
+     "b": "huk",
+     "label": "new to the party"
+    },
+    {
+     "a": "fernrel",
+     "b": "ice",
+     "label": "saved her life"
+    },
+    {
+     "a": "fernrel",
+     "b": "balasar",
+     "label": "his Storm marked her"
+    },
+    {
+     "a": "fernrel",
+     "b": "ghielis",
+     "label": "worked closely"
+    },
+    {
+     "a": "fernrel",
+     "b": "linxa",
+     "label": "cast her out"
+    },
+    {
+     "a": "fernrel",
+     "b": "dragonborn",
+     "label": "looked down on her"
+    },
+    {
+     "a": "fernrel",
+     "b": "varaxxus",
+     "label": "hunting her; her prey"
+    },
+    {
+     "a": "fernrel",
+     "b": "tiamat",
+     "label": "boss fight"
+    },
+    {
+     "a": "ghielis",
+     "b": "linxa",
+     "label": "secretly against",
+     "dash": true
+    },
+    {
+     "a": "linxa",
+     "b": "dragonborn",
+     "label": "worship her",
+     "dash": true
+    },
+    {
+     "a": "melarin",
+     "b": "tiamat",
+     "label": "\"murder them all\"",
+     "dash": true
+    }
+   ]
+  }
  }
 }
