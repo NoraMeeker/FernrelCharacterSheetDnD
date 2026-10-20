@@ -295,6 +295,39 @@ td input[type="checkbox"] { accent-color: var(--accent); width: 16px; height: 16
 .zap { animation: zap .6s ease-out; }
 .loading { padding: 60px 0; color: var(--muted); font-style: italic; }
 
+/* right now: what's active this fight */
+.now { display: flex; flex-wrap: wrap; gap: 12px 22px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; }
+.now-item { display: flex; flex-direction: column; gap: 3px; flex: 1 1 190px; min-width: 0; }
+.now-item .ed.live { font-family: var(--display); font-size: 1.15rem; }
+.now-item select { font-family: var(--display); font-size: 1.05rem; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 3px 6px; min-height: 36px; }
+.now-tip { font-family: var(--ui); font-size: .8rem; color: var(--muted); line-height: 1.35; }
+.now-conds { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; min-height: 32px; }
+.now-conds .cond { min-height: 26px; padding: 2px 9px; }
+.now-down { flex-basis: 100%; font-family: var(--ui); font-weight: 700; color: var(--bad); }
+.ring-btn { font-family: var(--ui); font-size: .9rem; min-height: 36px; border: 1px solid var(--accent); border-radius: 999px; background: none; color: var(--accent); padding: 4px 14px; align-self: flex-start; }
+.ring-btn.on { background: var(--accent); color: var(--panel); font-weight: 700; box-shadow: 0 0 18px -2px var(--bolt-glow); animation: ring-throb 1.6s ease-in-out infinite; }
+@keyframes ring-throb { 50% { box-shadow: 0 0 30px 4px var(--bolt-glow); } }
+/* the ring is glowing: the page's edges pulse violet */
+.ring-veil { position: fixed; inset: 0; pointer-events: none; z-index: 39; box-shadow: inset 0 0 140px 14px rgba(150, 90, 255, .4); animation: ring-veil 2.4s ease-in-out infinite; }
+@keyframes ring-veil { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+/* Starlight Step: a flash of starlight, like her eyes lighting up */
+.step-flash { position: fixed; inset: 0; pointer-events: none; z-index: 45; background: radial-gradient(circle at 50% 42%, rgba(240, 230, 255, .85), rgba(150, 90, 255, .5) 35%, transparent 72%); animation: step-flash .6s ease-out forwards; }
+@keyframes step-flash { 0% { opacity: 0; } 15% { opacity: 1; } 100% { opacity: 0; } }
+/* HP: the bar warns, and the page dims when she's down */
+.hpbar span.mid { background: #f0a24a; }
+.hpbar span.low { background: var(--bad); }
+.down-veil { position: fixed; inset: 0; pointer-events: none; z-index: 38; background: radial-gradient(ellipse at center, rgba(10, 6, 14, .25), rgba(45, 0, 12, .7)); }
+/* the world */
+.world-intro { color: var(--muted); font-style: italic; max-width: 70ch; margin: 0 0 18px; }
+.world { display: flex; flex-direction: column; gap: 18px; }
+.world-sec { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; align-items: start; }
+.world-sec.has-img { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+.world-sec h2 { font-family: var(--body); font-weight: 700; font-size: 1.5rem; margin-bottom: 6px; display: flex; justify-content: space-between; gap: 8px; }
+.world-sec figure { margin: 0; }
+.world-sec img { width: 100%; border-radius: 8px; border: 1px solid var(--line); cursor: zoom-in; display: block; }
+.world-sec figcaption { font-family: var(--ui); font-size: .82rem; color: var(--muted); margin-top: 4px; }
+.world-sec .ed.multi { display: block; }
+@media (prefers-reduced-motion: reduce) { .ring-veil, .ring-btn.on { animation: none; } .ring-veil { opacity: .7; } }
 @media (max-width: 1360px) {
   .sheet { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .sheet .col-c { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
@@ -309,6 +342,7 @@ td input[type="checkbox"] { accent-color: var(--accent); width: 16px; height: 16
   .nav button small { display: none; }
   .nav button[aria-current="page"] { box-shadow: inset 0 -2px 0 var(--accent); }
   .sheet { grid-template-columns: minmax(0, 1fr); }
+  .world-sec.has-img { grid-template-columns: minmax(0, 1fr); }
   .app-grid { grid-template-columns: minmax(0, 1fr); }
   .main { padding-top: 16px; }
 }
@@ -336,7 +370,7 @@ const ABIL = [["str","Strength"],["dex","Dexterity"],["con","Constitution"],["in
 const SKILLS = [["Acrobatics","dex"],["Animal Handling","wis"],["Arcana","int"],["Athletics","str"],["Deception","cha"],["History","int"],["Insight","wis"],["Intimidation","cha"],["Investigation","int"],["Medicine","wis"],["Nature","int"],["Perception","wis"],["Performance","cha"],["Persuasion","cha"],["Religion","int"],["Sleight of Hand","dex"],["Stealth","dex"],["Survival","wis"]];
 const TABS = [
   ["sheet","Character Sheet"],["spells","Spells"],["features","Features & Traits"],
-  ["equipment","Equipment"],["appearance","Appearance & Art"],["notes","Campaign Notes"]];
+  ["equipment","Equipment"],["appearance","Appearance & Art"],["world","The World"],["notes","Campaign Notes"]];
 const LVL = {"0":"Cantrips","1":"1st Level","2":"2nd Level","3":"3rd Level","4":"4th Level"};
 
 let S = null;               // current state
@@ -384,7 +418,34 @@ function refreshCalc() {
   const tr = tranceSkill();
   app.querySelectorAll(".dot.pick").forEach(d => { const on = d.dataset.skill === tr; d.classList.toggle("tr", on); d.setAttribute("aria-pressed", on); });
   const bar = app.querySelector(".hpbar span");
-  if (bar) { const m = num(S.sheet.hpMax), c = num(S.sheet.hpCur); bar.style.width = m && c != null ? Math.max(0, Math.min(100, c / m * 100)) + "%" : "0%"; }
+  if (bar) { const m = num(S.sheet.hpMax), c = num(S.sheet.hpCur), r = m && c != null ? c / m : 1; bar.style.width = m && c != null ? Math.max(0, Math.min(100, r * 100)) + "%" : "0%"; bar.classList.toggle("mid", r <= .5 && r > .25); bar.classList.toggle("low", r <= .25); }
+  const tips = app.querySelector("[data-now-prey]"); if (tips) tips.hidden = !(S.sheet.prey || "").trim();
+  mood();
+}
+// page-wide effects that follow her state: the ring's glow, and dimming when she's down
+const ringOn = () => !!(S && S.sheet.ringGlowing);
+function veil(cls, on) {
+  let el = document.querySelector("." + cls);
+  if (on && !el) { el = document.createElement("div"); el.className = cls; el.setAttribute("aria-hidden", "true"); document.body.appendChild(el); }
+  if (!on && el) el.remove();
+}
+function mood() {
+  veil("ring-veil", ringOn());
+  veil("down-veil", num(S.sheet.hpCur) === 0);
+}
+function stepFlash() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const f = document.createElement("div"); f.className = "step-flash"; f.setAttribute("aria-hidden", "true");
+  document.body.appendChild(f); setTimeout(() => f.remove(), 700);
+}
+const fmtDay = () => new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+function toggleRing() {
+  const s = S.sheet; s.ringGlowing = !s.ringGlowing;
+  if (!s.ringGlowing) { toast("The ring went dark."); return; }
+  const signs = S.features.flatMap(g => g.items).find(it => it.name === "Signs of the corruption");
+  const line = `• ${fmtDay()}: the ring glowed.`;
+  if (signs && !(signs.text || "").trimEnd().endsWith(line)) signs.text = (signs.text || "").replace(/\n*$/, "\n") + line + "\n";
+  toast(`The ring is glowing.${signs ? " Logged in Signs of the corruption." : ""}`);
 }
 function totalWeight() { let t = 0; for (const it of S.equipment.items) t += (num(it.weight) || 0) * (num(it.qty) ?? 1); return (Math.round(t * 10) / 10) + " lb"; }
 
@@ -427,7 +488,7 @@ function vSheet() {
   const pinned = [];
   S.features.forEach((g, gi) => g.items.forEach((it, ii) => { const m = num(it.max) || 0; if (it.pin && m) pinned.push({ it, m, p: `features.${gi}.items.${ii}` }); }));
   const quick = pinned.length ? `<div class="quick">${pinned.map(({ it, m, p }) => `<div class="qt"><div><div class="qt-name">${esc(it.name)}</div><div class="see">${m - Math.min(m, it.used || 0)} of ${m} left${it.uses ? " · " + esc(it.uses.replace(/^.*?(per|once)/i, "$1")) : ""}</div></div>${pips(p + ".used", m, it.used || 0)}</div>`).join("")}</div>` : "";
-  return `${quick}
+  return `${quick}${vNow(s)}
   <div class="idband">${id.map(([p, l, ph]) => `<div>${T(p, { ph, ro: "—" })}<div class="label">${l}</div></div>`).join("")}</div>
   <div class="sheet">
     <div class="col-a">
@@ -469,6 +530,19 @@ function vSheet() {
       <p class="see">Features, traits and feats live in <button class="link" data-act="tab" data-tab="features">Features & Traits</button>. Gear lives in <button class="link" data-act="tab" data-tab="equipment">Equipment</button>.</p>
     </div>
   </div>`;
+}
+
+function vNow(s) {
+  const concs = Object.values(S.spells.list).flat().filter(sp => sp.conc && sp.name).map(sp => sp.name);
+  const on = s.conditions || [], ex = s.exhaustion || 0;
+  const chips = on.map(c => `<button class="cond on" data-act="jump" data-id="sec-conditions">${c}</button>`).join("") + (ex ? `<button class="cond on" data-act="jump" data-id="sec-conditions">Exhaustion ${ex}</button>` : "");
+  return `<section class="now" aria-label="Right now">
+    ${num(s.hpCur) === 0 ? `<div class="now-down">She's down. The DM rolls her death saves.</div>` : ""}
+    <div class="now-item"><span class="label">Slayer's Prey</span>${T("sheet.prey", { live: true, cls: "live", ph: "No target", ro: "No target" })}<span class="now-tip" data-now-prey${(s.prey || "").trim() ? "" : " hidden"}>+1d6 on her first hit each turn. Saves it forces: +1d6 (Supernatural Defense), or react with Slayer's Counter.</span></div>
+    <div class="now-item"><span class="label">Concentrating on</span><select data-p="sheet.concentration" id="f-concentration" aria-label="Concentration spell"><option value="">Nothing</option>${concs.map(n => `<option${s.concentration === n ? " selected" : ""}>${esc(n)}</option>`).join("")}</select>${s.concentration ? `<span class="now-tip">When she takes damage: Con save +${mod("con") ?? 0}, DC 10 or half the damage. Lucky can reroll.</span>` : ""}</div>
+    <div class="now-item"><span class="label">Conditions</span><div class="now-conds">${chips || `<span class="see">None</span>`}</div></div>
+    <div class="now-item"><span class="label">Her ring</span><button class="ring-btn${s.ringGlowing ? " on" : ""}" data-act="ring" aria-pressed="${!!s.ringGlowing}">${s.ringGlowing ? "The ring is glowing" : "Ring is dark"}</button><span class="now-tip">Tap when the DM says it glows.</span></div>
+  </section>`;
 }
 
 const CONDITIONS = [
@@ -596,8 +670,19 @@ function vNotes() {
   return `<div class="notes">${cards}</div>${editing ? `<p><button class="btn small" data-act="add" data-p="notes" data-tpl="note">Add note</button></p>` : ""}`;
 }
 
-const VIEWS = { sheet: vSheet, spells: vSpells, features: vFeatures, equipment: vEquipment, appearance: vAppearance, notes: vNotes };
-const COUNT = { spells: () => [1,2,3,4].reduce((t, k) => t + (S.spells.list[k] || []).length, 0) + (S.spells.list[0] || []).length, features: () => S.features.reduce((t, g) => t + g.items.length, 0), equipment: () => S.equipment.items.length, appearance: () => S.character.art.length || "", notes: () => S.notes.length };
+function vWorld() {
+  const w = S.world || (S.world = { intro: "", sections: [] });
+  const secs = w.sections.map((x, i) => `<section class="box world-sec${x.img ? " has-img" : ""}" id="world-${i}">
+      <div><h2>${T(`world.sections.${i}.title`, { ph: "Title" })}${editing ? `<button class="x" data-act="del" data-p="world.sections" data-i="${i}" aria-label="Remove section">✕</button>` : ""}</h2>${T(`world.sections.${i}.text`, { multi: true, ph: "What she knows about it" })}</div>
+      ${x.img ? `<figure><img src="${esc(x.img)}" alt="${esc(x.caption || x.title)}" data-act="zoom" loading="lazy"><figcaption>${esc(x.caption || "")}</figcaption></figure>` : ""}
+    </section>`).join("");
+  return `${w.intro || editing ? `<div class="world-intro">${T("world.intro", { multi: true, ph: "Overview" })}</div>` : ""}
+  <div class="world">${secs || `<p class="empty">Nothing here yet.</p>`}</div>
+  ${editing ? `<p><button class="btn small" data-act="add" data-p="world.sections" data-tpl="world">Add a section</button></p>` : ""}`;
+}
+
+const VIEWS = { sheet: vSheet, spells: vSpells, features: vFeatures, equipment: vEquipment, appearance: vAppearance, world: vWorld, notes: vNotes };
+const COUNT = { spells: () => [1,2,3,4].reduce((t, k) => t + (S.spells.list[k] || []).length, 0) + (S.spells.list[0] || []).length, features: () => S.features.reduce((t, g) => t + g.items.length, 0), equipment: () => S.equipment.items.length, appearance: () => S.character.art.length || "", world: () => (S.world?.sections || []).length || "", notes: () => S.notes.length };
 
 function render() {
   const s = S.sheet;
@@ -699,6 +784,7 @@ const TPL = {
   group: () => ({ id: "g" + Date.now(), kind: "Other", title: "New Section", intro: "", items: [] }),
   item: () => ({ name: "", qty: 1, weight: null, notes: "", equipped: false }),
   note: () => ({ title: "New Note", text: "" }),
+  world: () => ({ title: "", text: "" }),
 };
 
 app.addEventListener("click", e => {
@@ -721,7 +807,8 @@ app.addEventListener("click", e => {
   if (act === "jump") { document.getElementById(b.dataset.id)?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); return; }
   if (act === "edit") { editing = !editing; if (!editing && dirty) { clearTimeout(saveTimer); save(); } render(); return; }
   if (act === "zoom") { const lb = document.createElement("div"); lb.className = "lightbox"; lb.innerHTML = `<img src="${esc(b.getAttribute("src"))}" alt="${esc(b.alt)}">`; lb.onclick = () => lb.remove(); document.body.appendChild(lb); return; }
-  if (act === "pip") { const i = +b.dataset.i, used = getP(p) || 0; setP(p, i < used ? i : i + 1); render(); changed(); return; }
+  if (act === "pip") { const i = +b.dataset.i, used = getP(p) || 0, next = i < used ? i : i + 1; setP(p, next); if (next > used && /^Starlight Step/.test(getP(p.replace(/\.used$/, ""))?.name || "")) stepFlash(); render(); changed(); return; }
+  if (act === "ring") { toggleRing(); render(); changed(true); return; }
   if (act === "mark") { const i = +b.dataset.i, v = getP(p) || 0; setP(p, i < v ? i : i + 1); render(); changed(); return; }
   if (act === "toggle") { setP(p, !getP(p)); render(); changed(true); return; }
   if (act === "trance") { const n = b.dataset.skill; S.sheet.tranceSkill = tranceSkill() === n ? "" : n; render(); changed(true); return; }
@@ -755,6 +842,7 @@ function searchAll(q) {
   [["personality","Personality Traits"],["ideals","Ideals"],["bonds","Bonds"],["flaws","Flaws"]].forEach(([k, n]) => add(n, "Character Sheet", sh[k], "sheet", "sec-" + k));
   add("Spell materials", "Equipment", S.equipment.components, "equipment", "sec-components");
   add("Other holdings", "Equipment", S.equipment.notes, "equipment", "sec-holdings");
+  (S.world?.sections || []).forEach((x, i) => add(x.title, "The World", x.text, "world", `world-${i}`));
   [["appearance","Appearance"],["backstory","Backstory"],["allies","Allies & Organizations"]].forEach(([k, n]) => add(n, "Appearance & Art", S.character[k], "appearance", "sec-" + k));
   return out.sort((a, b) => a.score - b.score).slice(0, 12);
 }
@@ -784,7 +872,12 @@ function applyHp(kind, amt) {
     const temp = num(s.hpTemp) || 0, fromTemp = Math.min(temp, amt);
     s.hpTemp = temp - fromTemp || null;
     s.hpCur = Math.max(0, cur - (amt - fromTemp));
-    toast(`Took ${amt} damage${fromTemp ? ` (${fromTemp} from temporary HP)` : ""}. HP ${s.hpCur}${max != null ? " / " + max : ""}.${s.hpCur === 0 ? " She's down. Roll death saves." : ""}`);
+    let conc = "";
+    if (s.concentration) {
+      if (s.hpCur === 0) { conc = ` ${s.concentration} ends.`; s.concentration = ""; }
+      else conc = ` Concentration check for ${s.concentration}: Con save, DC ${Math.max(10, Math.floor(amt / 2))}.`;
+    }
+    toast(`Took ${amt} damage${fromTemp ? ` (${fromTemp} from temporary HP)` : ""}. HP ${s.hpCur}${max != null ? " / " + max : ""}.${s.hpCur === 0 ? " She's down." : ""}${conc}`);
   } else {
     s.hpCur = max != null ? Math.min(max, cur + amt) : cur + amt;
     if (s.hpCur > 0) { s.deathSuccess = 0; s.deathFail = 0; }
@@ -795,6 +888,7 @@ function applyHp(kind, amt) {
 function shortRest() {
   let feats = 0;
   S.features.forEach(g => g.items.forEach(it => { if (num(it.max) && /short/i.test(it.uses || "") && it.used) { it.used = 0; feats++; } }));
+  S.sheet.prey = "";
   const s = S.sheet, left = (num(s.hitDiceTotal) || 0) - (s.hitDiceUsed || 0), con = mod("con") ?? 0;
   toast(`Short rest finished. ${feats} feature${feats === 1 ? "" : "s"} recharged.${left > 0 ? ` To heal, spend hit dice: roll ${s.hitDice || "d10"} ${con >= 0 ? "+" : "−"} ${Math.abs(con)} for each, type the total in + Heal, and tap one hit die bubble per die. ${left} left.` : " No hit dice left to spend."}`);
 }
@@ -807,11 +901,12 @@ function longRest() {
   Object.values(S.spells.slots).forEach(sl => { sl.used = 0; });
   let feats = 0;
   S.features.forEach(g => g.items.forEach(it => { if (num(it.max) && /long rest/i.test(it.uses || "") && it.used) { it.used = 0; feats++; } }));
-  s.tranceSkill = ""; s.tranceTool = "";
+  s.tranceSkill = ""; s.tranceTool = ""; s.prey = ""; s.concentration = "";
   const exBefore = s.exhaustion || 0; if (exBefore) s.exhaustion = exBefore - 1;
   toast(`Long rest finished. HP full, spell slots back, ${back} hit ${back === 1 ? "die" : "dice"} regained, ${feats} feature${feats === 1 ? "" : "s"} recharged.${exBefore ? ` Exhaustion down to ${exBefore - 1} (if she ate and drank).` : ""} Pick new Astral Trance proficiencies.`);
 }
 function toast(msg) {
+  document.querySelectorAll(".toast").forEach(x => x.remove());
   const t = document.createElement("div"); t.className = "toast"; t.setAttribute("role", "status"); t.textContent = msg;
   document.body.appendChild(t); setTimeout(() => t.remove(), Math.max(5000, msg.length * 70));
 }
@@ -961,7 +1056,7 @@ function startStorm() {
     ctx.shadowBlur = 0;
   }
   function strike() {
-    setTimeout(strike, rand(4000, 9000));
+    setTimeout(strike, ringOn() ? rand(1200, 2600) : rand(4000, 9000));
     if (document.hidden) return;
     const vis = [...app.querySelectorAll(".box, .ab, .vital, .card, .qt, .pill-row, .coin, .feat, .note")].filter(el => {
       const r = el.getBoundingClientRect(); return r.width > 30 && r.bottom > 20 && r.top < innerHeight - 20 && r.right > 0 && r.left < innerWidth;
@@ -1099,7 +1194,7 @@ function startStormBox() {
       stroke(ctx, pts, .45 + Math.random() * .55, 1);
     }
     // surge: now and then the whole border lights up at once
-    if (!surge && Math.random() < .007) surge = now;
+    if (!surge && Math.random() < (ringOn() ? .03 : .007)) surge = now;
     if (surge) {
       const t = now - surge;
       if (t > 260) surge = 0;
