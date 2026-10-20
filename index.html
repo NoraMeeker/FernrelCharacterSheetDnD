@@ -308,16 +308,17 @@ td input[type="checkbox"] { accent-color: var(--accent); width: 16px; height: 16
 .ring-btn.on { background: var(--accent); color: var(--panel); font-weight: 700; box-shadow: 0 0 18px -2px var(--bolt-glow); animation: ring-throb 1.6s ease-in-out infinite; }
 @keyframes ring-throb { 50% { box-shadow: 0 0 30px 4px var(--bolt-glow); } }
 /* the ring is glowing: the page's edges pulse violet */
-.ring-veil { position: fixed; inset: 0; pointer-events: none; z-index: 39; background: radial-gradient(ellipse at center, rgba(110, 50, 220, .06) 30%, rgba(120, 50, 240, .3)); box-shadow: inset 0 0 220px 50px rgba(150, 90, 255, .6), inset 0 0 60px 6px rgba(200, 160, 255, .5); animation: ring-veil 1.7s ease-in-out infinite; }
+.ring-veil { position: fixed; inset: 0; pointer-events: none; z-index: 39; opacity: var(--ring, 0); }
+.ring-veil::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(110, 50, 220, .06) 30%, rgba(120, 50, 240, .3)); box-shadow: inset 0 0 220px 50px rgba(150, 90, 255, .6), inset 0 0 60px 6px rgba(200, 160, 255, .5); animation: ring-veil 1.7s ease-in-out infinite; }
 @keyframes ring-veil { 0%, 100% { opacity: .55; } 50% { opacity: 1; } 52% { opacity: .7; } 54% { opacity: 1; } }
 /* Starlight Step: a flash of starlight, like her eyes lighting up */
 .bolt-canvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 46; }
 .ring-canvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 41; }
 /* while the ring glows, every panel is charged */
-body.ring-on { background-color: #1a1024; }
-body.ring-on .box, body.ring-on .ab, body.ring-on .vital, body.ring-on .qt, body.ring-on .pill-row, body.ring-on .card, body.ring-on .group, body.ring-on .coin, body.ring-on .note { border-color: #9b6bff; box-shadow: 0 0 22px -6px var(--bolt-glow), inset 0 0 26px -14px rgba(150, 90, 255, .6); animation: charged 1.9s ease-in-out infinite; }
-body.ring-on .side { box-shadow: 1px 0 40px 0 var(--bolt-glow); }
-@keyframes charged { 50% { box-shadow: 0 0 34px -2px var(--bolt-glow), inset 0 0 34px -10px rgba(170, 110, 255, .75); } }
+body.ring-on { background-color: color-mix(in srgb, #1a1024 calc(var(--ring, 0) * 100%), var(--bg)); }
+body.ring-on .box, body.ring-on .ab, body.ring-on .vital, body.ring-on .qt, body.ring-on .pill-row, body.ring-on .card, body.ring-on .group, body.ring-on .coin, body.ring-on .note { border-color: color-mix(in srgb, #9b6bff calc(var(--ring, 0) * 100%), var(--line)); box-shadow: 0 0 22px -6px rgba(150, 90, 255, calc(.55 * var(--ring, 0))), inset 0 0 26px -14px rgba(150, 90, 255, calc(.6 * var(--ring, 0))); animation: charged 1.9s ease-in-out infinite; }
+body.ring-on .side { box-shadow: 1px 0 40px 0 rgba(150, 90, 255, calc(.55 * var(--ring, 0))); }
+@keyframes charged { 50% { box-shadow: 0 0 34px -2px rgba(150, 90, 255, calc(.55 * var(--ring, 0))), inset 0 0 34px -10px rgba(170, 110, 255, calc(.75 * var(--ring, 0))); } }
 /* HP: the bar warns, and the page dims when she's down */
 .hpbar span.mid { background: #f0a24a; }
 .hpbar span.low { background: var(--bad); }
@@ -332,7 +333,7 @@ body.ring-on .side { box-shadow: 1px 0 40px 0 var(--bolt-glow); }
 .world-sec img { width: 100%; border-radius: 8px; border: 1px solid var(--line); cursor: zoom-in; display: block; }
 .world-sec figcaption { font-family: var(--ui); font-size: .82rem; color: var(--muted); margin-top: 4px; }
 .world-sec .ed.multi { display: block; }
-@media (prefers-reduced-motion: reduce) { .ring-veil, .ring-btn.on, body.ring-on .box, body.ring-on .ab, body.ring-on .vital, body.ring-on .qt, body.ring-on .pill-row, body.ring-on .card, body.ring-on .group, body.ring-on .coin, body.ring-on .note { animation: none; } .ring-veil { opacity: .8; } }
+@media (prefers-reduced-motion: reduce) { .ring-veil::before, .ring-btn.on, body.ring-on .box, body.ring-on .ab, body.ring-on .vital, body.ring-on .qt, body.ring-on .pill-row, body.ring-on .card, body.ring-on .group, body.ring-on .coin, body.ring-on .note { animation: none; } .ring-veil::before { opacity: .8; } }
 @media (max-width: 1360px) {
   .sheet { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .sheet .col-c { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
@@ -429,14 +430,22 @@ function refreshCalc() {
 }
 // page-wide effects that follow her state: the ring's glow, and dimming when she's down
 const ringOn = () => !!(S && S.sheet.ringGlowing);
+// how strongly the ring's storm shows right now: eases from 0 to 1 over a second and a half, and back
+let ringLvl = 0;
+function setRingLvl(v) {
+  ringLvl = v;
+  document.documentElement.style.setProperty("--ring", v.toFixed(3));
+  veil("ring-veil", v > 0);
+  document.body.classList.toggle("ring-on", v > 0);
+}
 function veil(cls, on) {
   let el = document.querySelector("." + cls);
   if (on && !el) { el = document.createElement("div"); el.className = cls; el.setAttribute("aria-hidden", "true"); document.body.appendChild(el); }
   if (!on && el) el.remove();
 }
 function mood() {
-  veil("ring-veil", ringOn());
-  document.body.classList.toggle("ring-on", ringOn());
+  // without motion there's no fade loop, so the ring switches straight on or off
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) setRingLvl(ringOn() ? 1 : 0);
   veil("down-veil", num(S.sheet.hpCur) === 0);
 }
 /* ---------- lightning shared by the Starlight Step bolt and the ring storm ---------- */
@@ -494,14 +503,17 @@ function stepFlash() {
     return [...main, [twin, .55]];
   };
   const first = strike(), second = strike();
+  const sky = a => { ctx.fillStyle = `rgba(215,190,255,${a})`; ctx.fillRect(0, 0, W, H); };
   const t0 = performance.now();
   (function frame(now) {
     const t = now - t0; ctx.clearRect(0, 0, W, H);
-    if (t < 90) paintBolts(ctx, first, .7, t / 90, 2.6);
-    else if (t < 170) { ctx.fillStyle = "rgba(170,120,255,.22)"; ctx.fillRect(0, 0, W, H); paintBolts(ctx, first, 1, 1, 3); }
-    else if (t < 230) paintBolts(ctx, first, .25, 1, 2.6);
-    else if (t < 310) { ctx.fillStyle = "rgba(170,120,255,.14)"; ctx.fillRect(0, 0, W, H); paintBolts(ctx, second, 1, 1, 3); }
-    else if (t < 700) paintBolts(ctx, second, 1 - (t - 310) / 390, 1, 2.6);
+    if (t < 30) paintBolts(ctx, first, .45, t / 30, 2.2);                 // faint leader
+    else if (t < 85) { sky(.4); paintBolts(ctx, first, 1, 1, 3); }        // the flash
+    else if (t < 120) {}                                                   // dark
+    else if (t < 160) { sky(.22); paintBolts(ctx, second, 1, 1, 3); }     // restrike
+    else if (t < 185) {}                                                   // dark
+    else if (t < 210) { sky(.08); paintBolts(ctx, first, .7, 1, 2.6); }   // last flicker
+    else if (t < 300) paintBolts(ctx, first, .35 * (1 - (t - 210) / 90), 1, 2.4); // afterimage
     else { cv.remove(); return; }
     requestAnimationFrame(frame);
   })(t0);
@@ -518,14 +530,19 @@ function startRingStorm() {
     s -= W; return { x: 0, y: H - s, nx: 1, ny: 0 };
   };
   const edge = P => at(Math.random() * P, P);
+  let tick = 0;
   function frame(now) {
     requestAnimationFrame(frame);
-    if (!ringOn() || document.hidden) { if (cv) { cv.remove(); cv = null; crawlers = []; bolts = []; } return; }
+    const dt = tick ? Math.min(100, now - tick) : 16; tick = now;
+    const goal = ringOn() ? 1 : 0;
+    if (ringLvl !== goal) setRingLvl(goal > ringLvl ? Math.min(1, ringLvl + dt / 1500) : Math.max(0, ringLvl - dt / 1500));
+    if (ringLvl === 0 || document.hidden) { if (cv) { cv.remove(); cv = null; crawlers = []; bolts = []; } return; }
     if (now - last < 33) return; last = now;
     if (!cv || W !== innerWidth || H !== innerHeight) { if (cv) cv.remove(); [cv, ctx] = fullCanvas("ring-canvas"); W = innerWidth; H = innerHeight; document.body.appendChild(cv); }
     const P = 2 * (W + H);
     ctx.clearRect(0, 0, W, H);
-    if (Math.random() < .03) sky = now;
+    ctx.globalAlpha = ringLvl;
+    if (Math.random() < .03 * ringLvl) sky = now;
     if (sky && now - sky < 90) { ctx.fillStyle = "rgba(160,100,255,.13)"; ctx.fillRect(0, 0, W, H); }
     // crawlers: lightning creeping all the way around the screen's edges
     if (!crawlers.length) for (let i = 0; i < 16; i++) crawlers.push({ s: Math.random() * P, v: (Math.random() < .5 ? -1 : 1) * (80 + Math.random() * 260), len: 90 + Math.random() * 220 });
@@ -540,7 +557,7 @@ function startRingStorm() {
     }
     paintBolts(ctx, lines, .55 + Math.random() * .45);
     // bolts that tear across the page: edge to edge, or edge to somewhere in the middle
-    if (Math.random() < .09) {
+    if (Math.random() < .09 * ringLvl) {
       const a = edge(P), b = Math.random() < .5 ? edge(P) : { x: W * (.2 + Math.random() * .6), y: H * (.2 + Math.random() * .6) };
       if (Math.hypot(b.x - a.x, b.y - a.y) > Math.min(W, H) * .35) bolts.push({ b: forked(a, b, .4, 4, 1), born: now, life: 140 + Math.random() * 220 });
     }
@@ -1167,7 +1184,7 @@ function startStorm() {
     ctx.shadowBlur = 0;
   }
   function strike() {
-    setTimeout(strike, ringOn() ? rand(450, 1100) : rand(4000, 9000));
+    setTimeout(strike, ringLvl > .5 ? rand(450, 1100) : rand(4000, 9000));
     if (document.hidden) return;
     const vis = [...app.querySelectorAll(".box, .ab, .vital, .card, .qt, .pill-row, .coin, .feat, .note")].filter(el => {
       const r = el.getBoundingClientRect(); return r.width > 30 && r.bottom > 20 && r.top < innerHeight - 20 && r.right > 0 && r.left < innerWidth;
@@ -1305,7 +1322,7 @@ function startStormBox() {
       stroke(ctx, pts, .45 + Math.random() * .55, 1);
     }
     // surge: now and then the whole border lights up at once
-    if (!surge && Math.random() < (ringOn() ? .06 : .007)) surge = now;
+    if (!surge && Math.random() < .007 + .053 * ringLvl) surge = now;
     if (surge) {
       const t = now - surge;
       if (t > 260) surge = 0;
