@@ -467,9 +467,9 @@ function refreshCalc() {
 }
 // page-wide effects that follow her state: the ring's glow, and dimming when she's down
 const ringOn = () => !!(S && S.sheet.ringGlowing);
-// each "•" line in Signs of the corruption is one sign; past four, the page's storm gets busier with every sign (up to three times as busy)
+// each "•" line in Signs of the corruption is one sign; past six, the page's storm gets busier with every sign (up to three times as busy)
 function signsCount() { const it = S && S.features.flatMap(g => g.items).find(i => i.name === "Signs of the corruption"); return it ? ((it.text || "").match(/^•/gm) || []).length : 0; }
-const stormBoost = () => 1 + Math.min(2, Math.max(0, signsCount() - 4) * .25);
+const stormBoost = () => 1 + Math.min(2, Math.max(0, signsCount() - 6) * .25);
 // how strongly the ring's storm shows right now: eases from 0 to 1 over a second and a half, and back
 let ringLvl = 0;
 function setRingLvl(v) {
