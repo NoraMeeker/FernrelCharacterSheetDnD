@@ -490,30 +490,39 @@ function fullCanvas(cls) {
   const ctx = cv.getContext("2d"); ctx.setTransform(r, 0, 0, r, 0, 0);
   return [cv, ctx];
 }
-// Starlight Step: one huge, layered bolt rips across the whole page, strikes twice, and is gone
+// Starlight Step: the same strike as the storm's bolts (leader, flash, dark, re-strike, flicker), but huge and across the whole page
 function stepFlash() {
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const [cv, ctx] = fullCanvas("bolt-canvas"); document.body.appendChild(cv);
   const W = innerWidth, H = innerHeight, ltr = Math.random() < .5;
   const a = { x: ltr ? -20 : W + 20, y: H * (.08 + Math.random() * .35) }, b = { x: ltr ? W + 20 : -20, y: H * (.55 + Math.random() * .4) };
-  const strike = () => {
-    const main = forked(a, b, .38, 9);
-    // a second, thinner bolt racing alongside the first makes it read as layered
-    const twin = jagged({ x: a.x, y: a.y + 14 }, { x: b.x, y: b.y - 10 }, .3).map(p => ({ x: p.x + (Math.random() - .5) * 6, y: p.y + (Math.random() - .5) * 6 }));
-    return [...main, [twin, .55]];
+  const first = forked(a, b, .4, 7), second = forked(a, b, .4, 7), third = Math.random() < .7 ? forked(a, b, .4, 6) : null;
+  // drawn like the storm's bolts (a purple glow under a pale core), at about three times the size and brighter
+  const draw = (bolts, al, upto = 1, sky = 0) => {
+    ctx.clearRect(0, 0, W, H);
+    if (al <= 0) return;
+    if (sky > 0) { ctx.fillStyle = `rgba(150,100,255,${sky})`; ctx.fillRect(0, 0, W, H); }
+    ctx.lineJoin = "round"; ctx.lineCap = "round";
+    for (const [pts, w] of bolts) {
+      const n = Math.max(2, Math.ceil(pts.length * upto));
+      ctx.beginPath(); for (let i = 0; i < n; i++) i ? ctx.lineTo(pts[i].x, pts[i].y) : ctx.moveTo(pts[i].x, pts[i].y);
+      ctx.shadowColor = "#9b5cff"; ctx.shadowBlur = 40;
+      ctx.strokeStyle = `rgba(160,110,255,${.7 * al})`; ctx.lineWidth = 15 * w; ctx.stroke();
+      ctx.shadowBlur = 14;
+      ctx.strokeStyle = `rgba(242,232,255,${al})`; ctx.lineWidth = 4.2 * w; ctx.stroke();
+    }
+    ctx.shadowBlur = 0;
   };
-  const first = strike(), second = strike();
-  const sky = a => { ctx.fillStyle = `rgba(215,190,255,${a})`; ctx.fillRect(0, 0, W, H); };
   const t0 = performance.now();
   (function frame(now) {
-    const t = now - t0; ctx.clearRect(0, 0, W, H);
-    if (t < 30) paintBolts(ctx, first, .45, t / 30, 2.2);                 // faint leader
-    else if (t < 85) { sky(.4); paintBolts(ctx, first, 1, 1, 3); }        // the flash
-    else if (t < 120) {}                                                   // dark
-    else if (t < 160) { sky(.22); paintBolts(ctx, second, 1, 1, 3); }     // restrike
-    else if (t < 185) {}                                                   // dark
-    else if (t < 210) { sky(.08); paintBolts(ctx, first, .7, 1, 2.6); }   // last flicker
-    else if (t < 300) paintBolts(ctx, first, .35 * (1 - (t - 210) / 90), 1, 2.4); // afterimage
+    const t = now - t0;
+    if (t < 60) draw(first, .55, t / 60);
+    else if (t < 110) draw(first, 1, 1, .1);
+    else if (t < 170) draw(first, 0);
+    else if (t < 215) draw(second, .95, 1, .06);
+    else if (t < 265) draw(second, 0);
+    else if (third && t < 295) draw(third, .7, 1, .03);
+    else if (t < 380) draw(third || second, Math.max(0, .3 - (t - 295) / 280));
     else { cv.remove(); return; }
     requestAnimationFrame(frame);
   })(t0);
