@@ -301,8 +301,10 @@ td input[type="checkbox"] { accent-color: var(--accent); width: 16px; height: 16
 .now-item .ed.live { font-family: var(--display); font-size: 1.15rem; }
 .now-item select { font-family: var(--display); font-size: 1.05rem; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 3px 6px; min-height: 36px; }
 .now-tip { font-family: var(--ui); font-size: .8rem; color: var(--muted); line-height: 1.35; }
-.now-conds { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; min-height: 32px; }
-.now-conds .cond { min-height: 26px; padding: 2px 9px; }
+.now-item.wide { flex-basis: 100%; }
+.now-conds { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+.now-conds .cond { min-height: 28px; padding: 2px 10px; font-size: .78rem; }
+.now-conds .cond:not(.on):hover { border-color: var(--bad); color: var(--ink); }
 .now-down { flex-basis: 100%; font-family: var(--ui); font-weight: 700; color: var(--bad); }
 .ring-btn { font-family: var(--ui); font-size: .9rem; min-height: 36px; border: 1px solid var(--accent); border-radius: 999px; background: none; color: var(--accent); padding: 4px 14px; align-self: flex-start; }
 .ring-btn.on { background: var(--accent); color: var(--panel); font-weight: 700; box-shadow: 0 0 18px -2px var(--bolt-glow); animation: ring-throb 1.6s ease-in-out infinite; }
@@ -672,13 +674,14 @@ function vSheet() {
 function vNow(s) {
   const concs = Object.values(S.spells.list).flat().filter(sp => sp.conc && sp.name).map(sp => sp.name);
   const on = s.conditions || [], ex = s.exhaustion || 0;
-  const chips = on.map(c => `<button class="cond on" data-act="jump" data-id="sec-conditions">${c}</button>`).join("") + (ex ? `<button class="cond on" data-act="jump" data-id="sec-conditions">Exhaustion ${ex}</button>` : "");
+  // every condition as a small toggle, so several can be on at once mid-fight
+  const chips = CONDITIONS.map(([c, d]) => `<button class="cond${on.includes(c) ? " on" : ""}" data-act="cond" data-c="${c}" title="${esc(d)}" aria-pressed="${on.includes(c)}">${c}</button>`).join("") + (ex ? `<button class="cond on" data-act="jump" data-id="sec-conditions" title="Exhaustion is set in the Conditions box">Exhaustion ${ex}</button>` : "");
   return `<section class="now" aria-label="Right now">
     ${num(s.hpCur) === 0 ? `<div class="now-down">She's down. The DM rolls her death saves.</div>` : ""}
     <div class="now-item"><span class="label">Slayer's Prey</span>${T("sheet.prey", { live: true, cls: "live", ph: "No target", ro: "No target" })}<span class="now-tip" data-now-prey${(s.prey || "").trim() ? "" : " hidden"}>+1d6 on her first hit each turn. Saves it forces: +1d6 (Supernatural Defense), or react with Slayer's Counter.</span></div>
     <div class="now-item"><span class="label">Concentrating on</span><select data-p="sheet.concentration" id="f-concentration" aria-label="Concentration spell"><option value="">Nothing</option>${concs.map(n => `<option${s.concentration === n ? " selected" : ""}>${esc(n)}</option>`).join("")}</select>${s.concentration ? `<span class="now-tip">When she takes damage: Con save +${mod("con") ?? 0}, DC 10 or half the damage. Lucky can reroll.</span>` : ""}</div>
-    <div class="now-item"><span class="label">Conditions</span><div class="now-conds">${chips || `<span class="see">None</span>`}</div></div>
     <div class="now-item"><span class="label">Her ring</span><button class="ring-btn${s.ringGlowing ? " on" : ""}" data-act="ring" aria-pressed="${!!s.ringGlowing}">${s.ringGlowing ? "The ring is glowing" : "Ring is dark"}</button><span class="now-tip">Tap when the DM says it glows.</span></div>
+    <div class="now-item wide"><span class="label">Conditions (tap to turn on or off; effects are listed in the Conditions box)</span><div class="now-conds">${chips}</div></div>
   </section>`;
 }
 
