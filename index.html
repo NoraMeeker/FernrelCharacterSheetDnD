@@ -308,11 +308,16 @@ td input[type="checkbox"] { accent-color: var(--accent); width: 16px; height: 16
 .ring-btn.on { background: var(--accent); color: var(--panel); font-weight: 700; box-shadow: 0 0 18px -2px var(--bolt-glow); animation: ring-throb 1.6s ease-in-out infinite; }
 @keyframes ring-throb { 50% { box-shadow: 0 0 30px 4px var(--bolt-glow); } }
 /* the ring is glowing: the page's edges pulse violet */
-.ring-veil { position: fixed; inset: 0; pointer-events: none; z-index: 39; box-shadow: inset 0 0 140px 14px rgba(150, 90, 255, .4); animation: ring-veil 2.4s ease-in-out infinite; }
-@keyframes ring-veil { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+.ring-veil { position: fixed; inset: 0; pointer-events: none; z-index: 39; background: radial-gradient(ellipse at center, rgba(110, 50, 220, .06) 30%, rgba(120, 50, 240, .3)); box-shadow: inset 0 0 220px 50px rgba(150, 90, 255, .6), inset 0 0 60px 6px rgba(200, 160, 255, .5); animation: ring-veil 1.7s ease-in-out infinite; }
+@keyframes ring-veil { 0%, 100% { opacity: .55; } 50% { opacity: 1; } 52% { opacity: .7; } 54% { opacity: 1; } }
 /* Starlight Step: a flash of starlight, like her eyes lighting up */
-.step-flash { position: fixed; inset: 0; pointer-events: none; z-index: 45; background: radial-gradient(circle at 50% 42%, rgba(240, 230, 255, .85), rgba(150, 90, 255, .5) 35%, transparent 72%); animation: step-flash .6s ease-out forwards; }
-@keyframes step-flash { 0% { opacity: 0; } 15% { opacity: 1; } 100% { opacity: 0; } }
+.bolt-canvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 46; }
+.ring-canvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 41; }
+/* while the ring glows, every panel is charged */
+body.ring-on { background-color: #1a1024; }
+body.ring-on .box, body.ring-on .ab, body.ring-on .vital, body.ring-on .qt, body.ring-on .pill-row, body.ring-on .card, body.ring-on .group, body.ring-on .coin, body.ring-on .note { border-color: #9b6bff; box-shadow: 0 0 22px -6px var(--bolt-glow), inset 0 0 26px -14px rgba(150, 90, 255, .6); animation: charged 1.9s ease-in-out infinite; }
+body.ring-on .side { box-shadow: 1px 0 40px 0 var(--bolt-glow); }
+@keyframes charged { 50% { box-shadow: 0 0 34px -2px var(--bolt-glow), inset 0 0 34px -10px rgba(170, 110, 255, .75); } }
 /* HP: the bar warns, and the page dims when she's down */
 .hpbar span.mid { background: #f0a24a; }
 .hpbar span.low { background: var(--bad); }
@@ -327,7 +332,7 @@ td input[type="checkbox"] { accent-color: var(--accent); width: 16px; height: 16
 .world-sec img { width: 100%; border-radius: 8px; border: 1px solid var(--line); cursor: zoom-in; display: block; }
 .world-sec figcaption { font-family: var(--ui); font-size: .82rem; color: var(--muted); margin-top: 4px; }
 .world-sec .ed.multi { display: block; }
-@media (prefers-reduced-motion: reduce) { .ring-veil, .ring-btn.on { animation: none; } .ring-veil { opacity: .7; } }
+@media (prefers-reduced-motion: reduce) { .ring-veil, .ring-btn.on, body.ring-on .box, body.ring-on .ab, body.ring-on .vital, body.ring-on .qt, body.ring-on .pill-row, body.ring-on .card, body.ring-on .group, body.ring-on .coin, body.ring-on .note { animation: none; } .ring-veil { opacity: .8; } }
 @media (max-width: 1360px) {
   .sheet { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .sheet .col-c { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
@@ -431,12 +436,118 @@ function veil(cls, on) {
 }
 function mood() {
   veil("ring-veil", ringOn());
+  document.body.classList.toggle("ring-on", ringOn());
   veil("down-veil", num(S.sheet.hpCur) === 0);
 }
+/* ---------- lightning shared by the Starlight Step bolt and the ring storm ---------- */
+function jagged(a, b, rough, levels = 7) {
+  let pts = [a, b];
+  for (let l = 0; l < levels; l++) {
+    const next = [pts[0]];
+    for (let i = 1; i < pts.length; i++) {
+      const p = pts[i - 1], q = pts[i], len = Math.hypot(q.x - p.x, q.y - p.y) || 1, off = (Math.random() - .5) * len * rough;
+      next.push({ x: (p.x + q.x) / 2 - (q.y - p.y) / len * off, y: (p.y + q.y) / 2 + (q.x - p.x) / len * off }, q);
+    }
+    pts = next;
+  }
+  return pts;
+}
+function forked(a, b, rough, branches, depth = 2) {
+  const main = jagged(a, b, rough), out = [[main, 1]];
+  const len = Math.hypot(b.x - a.x, b.y - a.y), ang = Math.atan2(b.y - a.y, b.x - a.x);
+  for (let k = 0; k < branches; k++) {
+    const from = main[Math.floor((.08 + Math.random() * .84) * main.length)], ba = ang + (Math.random() - .5) * 1.9, bl = len * (.08 + Math.random() * .22);
+    const to = { x: from.x + Math.cos(ba) * bl, y: from.y + Math.sin(ba) * bl };
+    if (depth > 1) forked(from, to, rough * 1.1, 2, depth - 1).forEach(([pts, w]) => out.push([pts, w * .5]));
+    else out.push([jagged(from, to, rough * 1.1, 5), .45]);
+  }
+  return out;
+}
+// four layers per bolt: wide violet haze, purple glow, bright body, white-hot core
+function paintBolts(ctx, bolts, a, upto = 1, scale = 1) {
+  if (a <= 0) return;
+  ctx.lineJoin = "round"; ctx.lineCap = "round";
+  const layers = [[16, `rgba(110,50,255,${.16 * a})`, 46], [7, `rgba(160,100,255,${.5 * a})`, 22], [2.8, `rgba(225,205,255,${.9 * a})`, 10], [1.1, `rgba(255,255,255,${a})`, 4]];
+  for (const [w, col, blur] of layers) for (const [pts, bw] of bolts) {
+    const n = Math.max(2, Math.ceil(pts.length * upto));
+    ctx.beginPath(); for (let i = 0; i < n; i++) i ? ctx.lineTo(pts[i].x, pts[i].y) : ctx.moveTo(pts[i].x, pts[i].y);
+    ctx.shadowColor = "#9b5cff"; ctx.shadowBlur = blur; ctx.strokeStyle = col; ctx.lineWidth = w * bw * scale; ctx.stroke();
+  }
+  ctx.shadowBlur = 0;
+}
+function fullCanvas(cls) {
+  const cv = document.createElement("canvas"); cv.className = cls; cv.setAttribute("aria-hidden", "true");
+  const r = window.devicePixelRatio || 1; cv.width = innerWidth * r; cv.height = innerHeight * r;
+  const ctx = cv.getContext("2d"); ctx.setTransform(r, 0, 0, r, 0, 0);
+  return [cv, ctx];
+}
+// Starlight Step: one huge, layered bolt rips across the whole page, strikes twice, and is gone
 function stepFlash() {
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  const f = document.createElement("div"); f.className = "step-flash"; f.setAttribute("aria-hidden", "true");
-  document.body.appendChild(f); setTimeout(() => f.remove(), 700);
+  const [cv, ctx] = fullCanvas("bolt-canvas"); document.body.appendChild(cv);
+  const W = innerWidth, H = innerHeight, ltr = Math.random() < .5;
+  const a = { x: ltr ? -20 : W + 20, y: H * (.08 + Math.random() * .35) }, b = { x: ltr ? W + 20 : -20, y: H * (.55 + Math.random() * .4) };
+  const strike = () => {
+    const main = forked(a, b, .38, 9);
+    // a second, thinner bolt racing alongside the first makes it read as layered
+    const twin = jagged({ x: a.x, y: a.y + 14 }, { x: b.x, y: b.y - 10 }, .3).map(p => ({ x: p.x + (Math.random() - .5) * 6, y: p.y + (Math.random() - .5) * 6 }));
+    return [...main, [twin, .55]];
+  };
+  const first = strike(), second = strike();
+  const t0 = performance.now();
+  (function frame(now) {
+    const t = now - t0; ctx.clearRect(0, 0, W, H);
+    if (t < 90) paintBolts(ctx, first, .7, t / 90, 2.6);
+    else if (t < 170) { ctx.fillStyle = "rgba(170,120,255,.22)"; ctx.fillRect(0, 0, W, H); paintBolts(ctx, first, 1, 1, 3); }
+    else if (t < 230) paintBolts(ctx, first, .25, 1, 2.6);
+    else if (t < 310) { ctx.fillStyle = "rgba(170,120,255,.14)"; ctx.fillRect(0, 0, W, H); paintBolts(ctx, second, 1, 1, 3); }
+    else if (t < 700) paintBolts(ctx, second, 1 - (t - 310) / 390, 1, 2.6);
+    else { cv.remove(); return; }
+    requestAnimationFrame(frame);
+  })(t0);
+}
+// the ring storm: while the ring glows, lightning crawls the screen's edges and tears across the page
+function startRingStorm() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  let cv = null, ctx = null, W = 0, H = 0, last = 0, crawlers = [], bolts = [], sky = 0;
+  const at = (s, P) => {
+    s = ((s % P) + P) % P;
+    if (s < W) return { x: s, y: 0, nx: 0, ny: 1 };
+    s -= W; if (s < H) return { x: W, y: s, nx: -1, ny: 0 };
+    s -= H; if (s < W) return { x: W - s, y: H, nx: 0, ny: -1 };
+    s -= W; return { x: 0, y: H - s, nx: 1, ny: 0 };
+  };
+  const edge = P => at(Math.random() * P, P);
+  function frame(now) {
+    requestAnimationFrame(frame);
+    if (!ringOn() || document.hidden) { if (cv) { cv.remove(); cv = null; crawlers = []; bolts = []; } return; }
+    if (now - last < 33) return; last = now;
+    if (!cv || W !== innerWidth || H !== innerHeight) { if (cv) cv.remove(); [cv, ctx] = fullCanvas("ring-canvas"); W = innerWidth; H = innerHeight; document.body.appendChild(cv); }
+    const P = 2 * (W + H);
+    ctx.clearRect(0, 0, W, H);
+    if (Math.random() < .03) sky = now;
+    if (sky && now - sky < 90) { ctx.fillStyle = "rgba(160,100,255,.13)"; ctx.fillRect(0, 0, W, H); }
+    // crawlers: lightning creeping all the way around the screen's edges
+    if (!crawlers.length) for (let i = 0; i < 16; i++) crawlers.push({ s: Math.random() * P, v: (Math.random() < .5 ? -1 : 1) * (80 + Math.random() * 260), len: 90 + Math.random() * 220 });
+    const lines = [];
+    for (const c of crawlers) {
+      c.s += c.v * .033; if (Math.random() < .015) c.v *= -1;
+      if (Math.random() < .15) continue;
+      const n = Math.max(6, Math.round(c.len / 9)), dir = Math.sign(c.v) || 1, pts = [];
+      for (let k = 0; k <= n; k++) { const p = at(c.s + dir * k * c.len / n, P), j = 4 + Math.random() * 16; pts.push({ x: p.x + p.nx * j, y: p.y + p.ny * j }); }
+      lines.push([pts, .8]);
+      if (Math.random() < .25) { const p = pts[Math.floor(pts.length / 2)], o = at(c.s, P); lines.push([jagged(p, { x: p.x + o.nx * (40 + Math.random() * 120) + (Math.random() - .5) * 80, y: p.y + o.ny * (40 + Math.random() * 120) + (Math.random() - .5) * 80 }, .5, 5), .45]); }
+    }
+    paintBolts(ctx, lines, .55 + Math.random() * .45);
+    // bolts that tear across the page: edge to edge, or edge to somewhere in the middle
+    if (Math.random() < .09) {
+      const a = edge(P), b = Math.random() < .5 ? edge(P) : { x: W * (.2 + Math.random() * .6), y: H * (.2 + Math.random() * .6) };
+      if (Math.hypot(b.x - a.x, b.y - a.y) > Math.min(W, H) * .35) bolts.push({ b: forked(a, b, .4, 4, 1), born: now, life: 140 + Math.random() * 220 });
+    }
+    bolts = bolts.filter(x => now - x.born < x.life);
+    for (const x of bolts) if (Math.random() > .25) paintBolts(ctx, x.b, 1 - (now - x.born) / x.life, 1, 1.1);
+  }
+  requestAnimationFrame(frame);
 }
 const fmtDay = () => new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 function toggleRing() {
@@ -1056,7 +1167,7 @@ function startStorm() {
     ctx.shadowBlur = 0;
   }
   function strike() {
-    setTimeout(strike, ringOn() ? rand(1200, 2600) : rand(4000, 9000));
+    setTimeout(strike, ringOn() ? rand(450, 1100) : rand(4000, 9000));
     if (document.hidden) return;
     const vis = [...app.querySelectorAll(".box, .ab, .vital, .card, .qt, .pill-row, .coin, .feat, .note")].filter(el => {
       const r = el.getBoundingClientRect(); return r.width > 30 && r.bottom > 20 && r.top < innerHeight - 20 && r.right > 0 && r.left < innerWidth;
@@ -1194,7 +1305,7 @@ function startStormBox() {
       stroke(ctx, pts, .45 + Math.random() * .55, 1);
     }
     // surge: now and then the whole border lights up at once
-    if (!surge && Math.random() < (ringOn() ? .03 : .007)) surge = now;
+    if (!surge && Math.random() < (ringOn() ? .06 : .007)) surge = now;
     if (surge) {
       const t = now - surge;
       if (t > 260) surge = 0;
@@ -1256,6 +1367,7 @@ function startStormBox() {
     paintCobbles();
     startStorm();
     startStormBox();
+    startRingStorm();
   } catch (e) {
     app.querySelector(".main").innerHTML = location.protocol === "file:"
       ? `<p class="loading">This page needs its little server to load Fernrel's data. In this folder, run <code>python3 server.py</code>, then open http://localhost:8000.</p>`
