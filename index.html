@@ -358,6 +358,7 @@ body.ring-on .side { box-shadow: 1px 0 40px 0 rgba(150, 90, 255, calc(.55 * var(
 .heart { position: absolute; pointer-events: none; color: #ff8fb8; font-size: 20px; animation: heart 1.1s ease-out forwards; }
 @keyframes heart { 0% { opacity: 0; transform: translate(0, 0) scale(.6); } 15% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--dx), -70px) scale(1.2); } }
 .nox-count { font-family: var(--display); font-size: 2rem; line-height: 1; }
+.nox-fix { display: flex; gap: 8px; margin-top: 8px; }
 /* relationship map */
 .relmap-wrap { overflow-x: auto; margin: 6px -4px 0; }
 .relmap { width: 100%; min-width: 760px; display: block; }
@@ -894,7 +895,8 @@ const NOX_SVG = `<svg viewBox="0 0 220 190" aria-hidden="true">
 </svg>`;
 function vNox() {
   return `<div class="box nox-card" id="sec-nox"><div class="nox-head" data-nox tabindex="0" role="button" aria-label="Pat Nox's head">${NOX_SVG}</div>
-    <div><div class="label">Headpats for Nox</div><div class="nox-count" data-nox-count>${S.sheet.noxPats || 0}</div><p class="see">Nox likes headpats from Fernrel. Click or stroke his head.</p></div></div>`;
+    <div><div class="label">Headpats for Nox</div><div class="nox-count" data-nox-count>${S.sheet.noxPats || 0}</div><p class="see">Nox likes headpats from Fernrel. Click or stroke his head.</p>
+    <div class="nox-fix"><button class="btn small" data-act="nox-dec" aria-label="Take away one headpat">−1</button><button class="btn small${ui.confirmNox ? " primary" : ""}" data-act="nox-reset">${ui.confirmNox ? "Tap again to reset" : "Reset"}</button></div></div></div>`;
 }
 let patTimer = null, lastPat = 0;
 function patNox(head, x) {
@@ -1077,6 +1079,12 @@ app.addEventListener("click", e => {
   if (act === "zoom") { const lb = document.createElement("div"); lb.className = "lightbox"; lb.innerHTML = `<img src="${esc(b.getAttribute("src"))}" alt="${esc(b.alt)}">`; lb.onclick = () => lb.remove(); document.body.appendChild(lb); return; }
   if (act === "pip") { const i = +b.dataset.i, used = getP(p) || 0, next = i < used ? i : i + 1; setP(p, next); if (next > used && /^Starlight Step/.test(getP(p.replace(/\.used$/, ""))?.name || "")) stepFlash(); render(); changed(); return; }
   if (act === "ring") { toggleRing(); render(); changed(true); return; }
+  if (act === "nox-dec") { S.sheet.noxPats = Math.max(0, (S.sheet.noxPats || 0) - 1); const c = app.querySelector("[data-nox-count]"); if (c) c.textContent = S.sheet.noxPats; changed(); return; }
+  if (act === "nox-reset") {
+    clearTimeout(ui.noxTimer);
+    if (!ui.confirmNox) { ui.confirmNox = true; render(); ui.noxTimer = setTimeout(() => { ui.confirmNox = false; render(); }, 4000); return; }
+    ui.confirmNox = false; S.sheet.noxPats = 0; render(); changed(true); toast("Headpats reset to 0."); return;
+  }
   if (act === "sound") { sfx.on = !sfx.on; try { localStorage.setItem("sound", sfx.on ? "on" : "off"); } catch (x) {} render(); return; }
   if (act === "mark") { const i = +b.dataset.i, v = getP(p) || 0; setP(p, i < v ? i : i + 1); render(); changed(); return; }
   if (act === "toggle") { setP(p, !getP(p)); render(); changed(true); return; }
