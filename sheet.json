@@ -38,11 +38,11 @@
   "speed": "40 ft",
   "initBonus": null,
   "hpMax": 154,
-  "hpCur": 33,
+  "hpCur": 154,
   "hpTemp": null,
   "hitDice": "d10",
   "hitDiceTotal": 16,
-  "hitDiceUsed": 3,
+  "hitDiceUsed": 0,
   "deathSuccess": 0,
   "deathFail": 0,
   "attacks": [
@@ -69,14 +69,14 @@
   "bonds": "",
   "flaws": "She's curious about the lightning even though everyone warns her not to use it.",
   "defenses": "Resistance: fire (metal band)\nResistance to magic (metal band). Ask the DM exactly what this covers.\nAdvantage on saves against being charmed (Fey Ancestry)\n+1d6 to saves forced by her Slayer's Prey target (Supernatural Defense)\nReaction: weapon attack before a save forced by her Slayer's Prey target; on a hit she automatically succeeds (Slayer's Counter)\n\nSenses: darkvision 60 ft, passive Perception 20",
-  "tranceSkill": "Acrobatics",
+  "tranceSkill": "Sleight of Hand",
   "tranceTool": "",
   "acNote": "17 without both rapiers",
   "conditions": [],
   "exhaustion": 0,
-  "prey": "Varaxxus",
+  "prey": "",
   "concentration": "",
-  "ringGlowing": true,
+  "ringGlowing": false,
   "noxPats": 0,
   "noxArt": [
    "art/nox-1.jpg",
@@ -92,7 +92,7 @@
    },
    "2": {
     "max": 3,
-    "used": 0
+    "used": 1
    },
    "3": {
     "max": 3,
@@ -100,7 +100,7 @@
    },
    "4": {
     "max": 2,
-    "used": 2
+    "used": 0
    }
   },
   "list": {
@@ -348,7 +348,7 @@
      "uses": "",
      "max": null,
      "used": 0,
-     "text": "Her Wisdom save is +5 (she isn't proficient). Lucky lets her roll an extra d20 on saving throws.\n\nEach line starting with • is one sign. The more signs, the stormier the whole sheet gets.\n\n• The very first time (Jul 14, 2026), before she had the ring: the party was racing up a cliff to escape a wall of lava. Suddenly she was 90 feet up in a flash of lightning: three Starlight Steps at once, the only time she has used more than one together. The DM confirmed it was her first teleport ever. Fernrel was shocked, staring at her hands, shaking a little.\n• The second time, still before the ring: her first fight with Varaxxus. When he was low on health he teleported away (something like misty step), and she followed him in a flash of lightning. Then he teleported or vanished for good.\n• The first time with the ring, on purpose: soon after she got the ring, the party was scaling a cliff while running from guards. The ring glowed. Nora asked the DM \"lightning?\" and he said \"lightning,\" so Fernrel lightning-ed 30 feet up the cliff. The next round the ring wasn't glowing; \"lightning?\" \"No lightning.\" So far she has only been able to call the lightning while the ring glows.\n• A few sessions ago: she watched the ring start to glow. The glow spread up her arm and she felt strange. She reached out, ready to use Starlight Step, but she didn't teleport. A ball of lightning shot from her hand instead. That was the first time the lightning came out when she didn't mean it to.\n• The session before Oct 14: the ring lit up and she had to make a Wisdom saving throw. This was also a first, so the corruption may be getting worse. Right after that save, a lightning drake attacked her. It seemed to be possessed by the Storm, and a lightning drake didn't fit the lava and obsidian land around them. Just before she killed it, it said \"I'll be back.\" She suspects Balasar was speaking through it, not the drake.\n• Oct 14: the ring glowed again in the middle of the boss fight, right after Varaxxus's chains and the fireball. She had already used her action and bonus action, so she didn't use it. The DM seemed a little disappointed, as if something big would have happened. The session ended with the ring still glowing.\n"
+     "text": "Her Wisdom save is +5 (she isn't proficient). Lucky lets her roll an extra d20 on saving throws.\n\nEach line starting with • is one sign. The more signs, the stormier the whole sheet gets.\n\n• The very first time (Jul 14, 2026), before she had the ring: the party was racing up a cliff to escape a wall of lava. Suddenly she was 90 feet up in a flash of lightning: three Starlight Steps at once, the only time she has used more than one together. The DM confirmed it was her first teleport ever. Fernrel was shocked, staring at her hands, shaking a little.\n• The second time, still before the ring: her first fight with Varaxxus. When he was low on health he teleported away (something like misty step), and she followed him in a flash of lightning. Then he teleported or vanished for good.\n• The first time with the ring, on purpose: soon after she got the ring, the party was scaling a cliff while running from guards. The ring glowed. Nora asked the DM \"lightning?\" and he said \"lightning,\" so Fernrel lightning-ed 30 feet up the cliff. The next round the ring wasn't glowing; \"lightning?\" \"No lightning.\" So far she has only been able to call the lightning while the ring glows.\n• A few sessions ago: she watched the ring start to glow. The glow spread up her arm and she felt strange. She reached out, ready to use Starlight Step, but she didn't teleport. A ball of lightning shot from her hand instead. That was the first time the lightning came out when she didn't mean it to.\n• The session before Oct 14: the ring lit up and she had to make a Wisdom saving throw. This was also a first, so the corruption may be getting worse. Right after that save, a lightning drake attacked her. It seemed to be possessed by the Storm, and a lightning drake didn't fit the lava and obsidian land around them. Just before she killed it, it said \"I'll be back.\" She suspects Balasar was speaking through it, not the drake.\n• Oct 14: the ring glowed again in the middle of the boss fight, right after Varaxxus's chains and the fireball. She had already used her action and bonus action, so she didn't use it. The DM seemed a little disappointed, as if something big would have happened. The session ended with the ring still glowing.\n• Oct 28, 2026: the ring glowed.\n"
     }
    ]
   },
